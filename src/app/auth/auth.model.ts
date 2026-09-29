@@ -3,9 +3,8 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface LoginResponse {
+export interface TokenResponse {
   accessToken: string;
-  refreshToken: string;
   tokenType: string;
   expiresIn: number;
 }

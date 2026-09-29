@@ -147,3 +147,86 @@ ProjectStore
 │
 14
 └── computed(...)
+
+
+SCENARIOS A VALIDER :
+✅ Login
+   accessToken → Signal
+   refreshToken → HttpOnly
+
+✅ Requête API
+   Authorization: Bearer accessToken
+
+✅ F5
+   accessToken perdu
+   refresh automatique
+   accessToken restauré
+   refreshToken rotaté
+
+✅ Access token expiré
+   API → 401
+   refresh → 200
+   requête rejouée → 200
+
+✅ Plusieurs 401
+   un seul /refresh
+
+✅ Logout
+   accessToken supprimé
+   refreshToken révoqué/supprimé
+
+✅ F5 après logout
+   session non restaurée
+
+PUIS CREER LE AUTHGUARD
+PUIS CREER LES ECRANS 
+V1 :
+/login
+/samples
+  Liste
+  Recherche
+  Filtres
+  Pagination
+ 
+/samples/new
+  Création
+/samples/:id
+  Consultation
+/samples/:id/edit
+  Modification
+/403
+/404
+
+V2 :
+historique / audit
+duplication d’un sample
+export CSV/Excel
+import en masse
+sélection multiple et actions groupées
+archivage plutôt que suppression physique
+dashboard avec quelques statistiques
+favoris / samples récemment consultés
+
+Objectif :
+                 ANGULAR STARTER (Créer le README adapté)
+
+ Authentication                  Architecture
+ ├── JWT                         ├── Lazy loading
+ ├── HttpOnly refresh            ├── Feature architecture
+ ├── Rotation                    ├── Signals
+ ├── Interceptor                 └── Typed models
+ └── Guards
+
+ Data                            UX
+ ├── HttpClient                  ├── Loading
+ ├── CRUD                        ├── Empty state
+ ├── Filtering                   ├── Errors
+ ├── Pagination                  ├── Toasts
+ └── Cache                       └── Responsive
+
+ Forms                           Quality
+ ├── Typed reactive forms       ├── Unit tests
+ ├── Validation                 ├── Component tests
+ ├── Async validation           ├── HTTP tests
+ └── Unsaved changes            ├── E2E
+                                └── lint / CI
