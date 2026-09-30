@@ -1,24 +1,54 @@
 import { Routes } from '@angular/router';
 
-import { LoginComponent } from './login/login.component';
-import { SampleListComponent } from './samples/sample-list.component';
+import { authChildGuard } from './auth/auth.guard';
 
 export const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent
-  },
-  {
-    path: 'samples',
-    component: SampleListComponent
+    loadComponent: () =>
+      import('./login/login.component')
+        .then(m => m.LoginComponent)
   },
   {
     path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
+    canActivateChild: [authChildGuard],
+    children: [
+      {
+        path: 'samples',
+        loadComponent: () =>
+          import('./samples/pages/sample-list/sample-list.component')
+            .then(m => m.SampleListComponent)
+      },
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'samples'
+      }
+    ]
+  },
+  {
+    path: 'samples/new',
+    loadComponent: () =>
+      import(
+        './samples/components/sample-create/sample-create.component'
+      ).then(m => m.SampleCreateComponent)
+  },
+  {
+    path: 'samples/:id/edit',
+    loadComponent: () =>
+    import(
+    './samples/components/sample-edit/sample-edit.component'
+    ).then(m => m.SampleEditComponent)
+  },
+  {
+    path: 'samples/:id',
+    loadComponent: () =>
+      import(
+        './samples/pages/sample-detail/sample-detail.component'
+      ).then(m => m.SampleDetailComponent)
   },
   {
     path: '**',
-    redirectTo: 'login'
+    redirectTo: 'samples'
   }
 ];

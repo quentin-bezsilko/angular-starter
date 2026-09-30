@@ -1,23 +1,30 @@
-import {ApplicationConfig, inject, provideAppInitializer} from '@angular/core';
-import {provideHttpClient,  withInterceptors} from '@angular/common/http';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer
+} from '@angular/core';
+
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+
 import { routes } from './app.routes';
-import { authInterceptor } from './auth/auth.interceptor';
 import { AuthService } from './auth/auth.service';
+import { authInterceptor } from './auth/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
 
     provideHttpClient(
-      withInterceptors([
-        authInterceptor
-      ])
+      withInterceptors([authInterceptor])
     ),
 
     provideAppInitializer(() => {
       const authService = inject(AuthService);
-      return authService.initializeSession();
+      return firstValueFrom(
+        authService.initializeSession()
+      );
     })
   ]
 };

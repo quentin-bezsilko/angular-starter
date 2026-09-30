@@ -1,0 +1,316 @@
+<form
+  class="sample-form"
+  [formGroup]="form"
+  (ngSubmit)="submit()">
+
+  <section class="form-section">
+
+    <h2>Informations générales</h2>
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label for="name">
+          Nom
+        </label>
+
+        <input
+          id="name"
+          type="text"
+          formControlName="name">
+
+        @if (hasError('name', 'required')) {
+          <p class="field-error">
+            Le nom est obligatoire.
+          </p>
+        }
+
+        @if (
+          hasError('name', 'minlength') ||
+          hasError('name', 'maxlength')
+        ) {
+          <p class="field-error">
+            Le nom doit contenir entre 3 et 100 caractères.
+          </p>
+        }
+
+        @if (hasError('name', 'pattern')) {
+          <p class="field-error">
+            Seuls les lettres, chiffres, tirets et underscores sont autorisés.
+          </p>
+        }
+      </div>
+
+
+      <div class="field">
+        <label for="category">
+          Catégorie
+        </label>
+
+        <input
+          id="category"
+          type="text"
+          maxlength="1"
+          formControlName="category">
+
+        @if (hasError('category', 'required')) {
+          <p class="field-error">
+            La catégorie est obligatoire.
+          </p>
+        }
+      </div>
+
+
+      <div class="field">
+        <label for="status">
+          Statut
+        </label>
+
+        <select
+          id="status"
+          formControlName="status">
+
+          @for (status of statuses; track status) {
+            <option [value]="status">
+              {{ status }}
+            </option>
+          }
+
+        </select>
+      </div>
+
+
+      <div class="field field--checkbox">
+
+        <label>
+          <input
+            type="checkbox"
+            formControlName="active">
+
+          Sample actif
+        </label>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+      <label for="description">
+        Description
+      </label>
+
+      <textarea
+        id="description"
+        rows="4"
+        formControlName="description">
+      </textarea>
+
+      @if (hasError('description', 'maxlength')) {
+        <p class="field-error">
+          La description ne peut pas dépasser 500 caractères.
+        </p>
+      }
+    </div>
+
+  </section>
+
+
+  <section class="form-section">
+
+    <h2>Données quantitatives</h2>
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label for="quantity">
+          Quantité
+        </label>
+
+        <input
+          id="quantity"
+          type="number"
+          formControlName="quantity">
+      </div>
+
+
+      <div class="field">
+        <label for="stock">
+          Stock
+        </label>
+
+        <input
+          id="stock"
+          type="number"
+          formControlName="stock">
+      </div>
+
+
+      <div class="field">
+        <label for="weight">
+          Poids
+        </label>
+
+        <input
+          id="weight"
+          type="number"
+          step="0.01"
+          formControlName="weight">
+      </div>
+
+
+      <div class="field">
+        <label for="ratio">
+          Ratio
+        </label>
+
+        <input
+          id="ratio"
+          type="number"
+          min="0"
+          max="1"
+          step="0.01"
+          formControlName="ratio">
+      </div>
+
+
+      <div class="field">
+        <label for="price">
+          Prix
+        </label>
+
+        <input
+          id="price"
+          type="number"
+          step="0.01"
+          formControlName="price">
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="form-section">
+
+    <h2>Fabrication</h2>
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label for="manufacturedDate">
+          Date de fabrication
+        </label>
+
+        <input
+          id="manufacturedDate"
+          type="date"
+          formControlName="manufacturedDate">
+
+        @if (
+          form.touched &&
+          form.hasError('futureDate')
+        ) {
+          <p class="field-error">
+            La date de fabrication ne peut pas être dans le futur.
+          </p>
+        }
+      </div>
+
+
+      <div class="field">
+        <label for="manufacturedTime">
+          Heure de fabrication
+        </label>
+
+        <input
+          id="manufacturedTime"
+          type="time"
+          formControlName="manufacturedTime">
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="form-section">
+
+    <h2>Document et commentaires</h2>
+
+    <div class="field">
+      <label for="document">
+        Document
+      </label>
+
+      <input
+        id="document"
+        type="file"
+        (change)="onFileSelected($event)">
+
+      @if (hasError('document', 'required')) {
+        <p class="field-error">
+          Un document est obligatoire.
+        </p>
+      }
+    </div>
+
+
+    <div class="field">
+      <label for="comments">
+        Commentaires
+      </label>
+
+      <textarea
+        id="comments"
+        rows="6"
+        formControlName="comments">
+      </textarea>
+
+      @if (hasError('comments', 'maxlength')) {
+        <p class="field-error">
+          Les commentaires ne peuvent pas dépasser 5000 caractères.
+        </p>
+      }
+    </div>
+
+  </section>
+
+
+  @if (form.hasError('activeRequiresStock')) {
+    <div class="form-error">
+      Un sample actif doit avoir un stock supérieur à zéro.
+    </div>
+  }
+
+  @if (form.hasError('deletedCannotHaveStock')) {
+    <div class="form-error">
+      Un sample supprimé ne peut pas avoir de stock.
+    </div>
+  }
+
+  @if (form.hasError('heavyRequiresCategoryH')) {
+    <div class="form-error">
+      Un sample dont le poids dépasse 500 doit appartenir à la catégorie H.
+    </div>
+  }
+
+
+  <footer class="form-actions">
+
+    <button
+      type="submit"
+      class="button button--primary"
+      [disabled]="submitting()">
+
+      @if (submitting()) {
+        Enregistrement...
+      } @else {
+        Enregistrer
+      }
+
+    </button>
+
+  </footer>
+
+</form>

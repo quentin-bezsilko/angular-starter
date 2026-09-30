@@ -82,22 +82,20 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return this.http
-      .post<void>(
-        `${this.authUrl}/logout`,
-        {},
-        {
-          withCredentials: true
-        }
-      )
-      .pipe(
-        tap(() => {
-          this.accessTokenSignal.set(null);
-        })
-      );
+      return this.http
+        .post<void>(
+          `${this.authUrl}/logout`,
+          {},
+          {
+            withCredentials: true
+          }
+        )
+        .pipe(
+          finalize(() => {
+            this.accessTokenSignal.set(null);
+          })
+        );
   }
-
-
 
   clearAccessToken(): void {
     this.accessTokenSignal.set(null);

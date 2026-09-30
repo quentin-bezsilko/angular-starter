@@ -1,0 +1,158 @@
+<section class="sample-list">
+
+  <header class="sample-list__header">
+    <div>
+      <h1>Samples</h1>
+      <p>Consultez et gérez les samples existants.</p>
+    </div>
+
+    <a
+      class="button button--primary"
+      routerLink="/samples/new">
+      Nouveau sample
+    </a>
+  </header>
+
+  @if (loading()) {
+
+    <div class="state">
+      <p>Chargement des samples...</p>
+    </div>
+
+  } @else if (error()) {
+
+    <div class="state state--error">
+      <p>{{ error() }}</p>
+
+      <button
+        type="button"
+        class="button"
+        (click)="loadSamples()">
+        Réessayer
+      </button>
+    </div>
+
+  } @else if (samples().length === 0) {
+
+    <div class="state">
+      <h2>Aucun sample</h2>
+
+      <p>
+        Aucun sample n'est disponible pour le moment.
+      </p>
+
+      <a
+        class="button button--primary"
+        routerLink="/samples/new">
+        Créer le premier sample
+      </a>
+    </div>
+
+  } @else {
+
+    <div class="table-container">
+
+      <table>
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Statut</th>
+            <th>Catégorie</th>
+            <th>Quantité</th>
+            <th>Stock</th>
+            <th>Prix</th>
+            <th>Actif</th>
+            <th>Créé le</th>
+            <th>
+              <span class="visually-hidden">
+                Actions
+              </span>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (sample of samples(); track sample.id) {
+
+            <tr>
+
+              <td>
+                <a
+                  class="sample-name"
+                  [routerLink]="['/samples', sample.id]">
+                  {{ sample.name }}
+                </a>
+              </td>
+
+              <td>
+                <span
+                  class="badge"
+                  [class.badge--created]="sample.status === SampleStatus.CREATED"
+                  [class.badge--active]="sample.status === SampleStatus.ACTIVE"
+                  [class.badge--archived]="sample.status === SampleStatus.ARCHIVED"
+                  [class.badge--deleted]="sample.status === SampleStatus.DELETED">
+                  {{ statusLabel(sample.status) }}
+                </span>
+              </td>
+
+              <td>
+                {{ sample.category }}
+              </td>
+
+              <td>
+                {{ sample.quantity }}
+              </td>
+
+              <td>
+                {{ sample.stock ?? '—' }}
+              </td>
+
+              <td>
+                {{ sample.price }} €
+              </td>
+
+              <td>
+                @if (sample.active) {
+                  <span class="active-status active-status--yes">
+                    Oui
+                  </span>
+                } @else {
+                  <span class="active-status active-status--no">
+                    Non
+                  </span>
+                }
+              </td>
+
+              <td>
+                @if (sample.createdAt) {
+                    {{ sample.createdAt | date:'dd/MM/yyyy HH:mm' }}
+                } @else {
+                    —
+                }
+              </td>
+
+              <td class="actions">
+                <a
+                  [routerLink]="['/samples', sample.id]">
+                  Consulter
+                </a>
+
+                <a
+                  [routerLink]="['/samples', sample.id, 'edit']">
+                  Modifier
+                </a>
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+      </table>
+
+    </div>
+
+  }
+
+</section>

@@ -1,0 +1,62 @@
+<section class="sample-edit">
+
+  <nav class="sample-edit__navigation">
+    @if (sample(); as sample) {
+      <a [routerLink]="['/samples', sample.id]">
+        ← Retour au sample
+      </a>
+    } @else {
+      <a routerLink="/samples">
+        ← Retour aux samples
+      </a>
+    }
+  </nav>
+
+  <header class="sample-edit__header">
+    <div>
+      <h1>Modifier le sample</h1>
+
+      @if (sample(); as sample) {
+        <p>
+          Modification de
+          <strong>{{ sample.name }}</strong>
+        </p>
+      }
+    </div>
+  </header>
+
+  @if (loading()) {
+
+    <div class="state">
+      <p>Chargement du sample...</p>
+    </div>
+
+  } @else if (error() && !sample()) {
+
+    <div class="state state--error">
+      <p>{{ error() }}</p>
+
+      <a
+        class="button"
+        routerLink="/samples">
+        Retour à la liste
+      </a>
+    </div>
+
+  } @else if (sample(); as sample) {
+
+    @if (error()) {
+      <div class="global-error">
+        {{ error() }}
+      </div>
+    }
+
+    <app-sample-form
+      [initialValue]="sample"
+      [submitting]="submitting()"
+      (formSubmit)="updateSample($event)">
+    </app-sample-form>
+
+  }
+
+</section>

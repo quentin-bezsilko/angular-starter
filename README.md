@@ -178,24 +178,20 @@ SCENARIOS A VALIDER :
 ✅ F5 après logout
    session non restaurée
 
-PUIS CREER LE AUTHGUARD
 PUIS CREER LES ECRANS 
 V1 :
-/login
+
+Implémenter le conflit de version côté Spring Boot et le 409 Conflict côté Angular.
+
 /samples
   Liste
   Recherche
   Filtres
   Pagination
- 
-/samples/new
-  Création
-/samples/:id
-  Consultation
-/samples/:id/edit
-  Modification
+
 /403
 /404
+/logout
 
 V2 :
 historique / audit
