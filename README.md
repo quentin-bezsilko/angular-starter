@@ -181,17 +181,15 @@ SCENARIOS A VALIDER :
 PUIS CREER LES ECRANS 
 V1 :
 
-Implémenter le conflit de version côté Spring Boot et le 409 Conflict côté Angular.
+/403
+/404
+/logout
 
-/samples
+/samples (modifier le service backend pour faire de la pagination)
   Liste
   Recherche
   Filtres
   Pagination
-
-/403
-/404
-/logout
 
 V2 :
 historique / audit

@@ -1,61 +1,101 @@
 <section class="sample-edit">
 
-  <nav class="sample-edit__navigation">
-    @if (sample(); as sample) {
-      <a [routerLink]="['/samples', sample.id]">
-        ← Retour au sample
-      </a>
-    } @else {
-      <a routerLink="/samples">
-        ← Retour aux samples
-      </a>
-    }
-  </nav>
-
   <header class="sample-edit__header">
     <div>
       <h1>Modifier le sample</h1>
 
-      @if (sample(); as sample) {
+      @if (sample(); as currentSample) {
         <p>
-          Modification de
-          <strong>{{ sample.name }}</strong>
+          {{ currentSample.name }}
         </p>
       }
     </div>
+
+    <a
+      routerLink="/samples"
+      class="btn btn-secondary"
+    >
+      Retour à la liste
+    </a>
   </header>
 
-  @if (loading()) {
 
-    <div class="state">
-      <p>Chargement du sample...</p>
+  @if (error()) {
+    <div
+      class="alert alert-danger"
+      role="alert"
+    >
+      {{ error() }}
     </div>
+  }
 
-  } @else if (error() && !sample()) {
 
-    <div class="state state--error">
-      <p>{{ error() }}</p>
+  @if (versionConflict()) {
+    <div
+      class="alert alert-warning"
+      role="alert"
+    >
+      <h2>Conflit de modification</h2>
 
-      <a
-        class="button"
-        routerLink="/samples">
-        Retour à la liste
-      </a>
+      <p>
+        {{ versionConflictMessage() }}
+      </p>
+
+      <p>
+        Un autre utilisateur a modifié ce sample depuis son chargement.
+        Vous devez récupérer la dernière version avant de pouvoir
+        enregistrer à nouveau.
+      </p>
+
+      <p>
+        <strong>Attention :</strong>
+        le rechargement remplacera vos modifications actuelles
+        par la dernière version enregistrée.
+      </p>
+
+      <button
+        type="button"
+        class="btn btn-warning"
+        (click)="reloadAfterConflict()"
+        [disabled]="loading()"
+      >
+        @if (loading()) {
+          Rechargement...
+        } @else {
+          Recharger la dernière version
+        }
+      </button>
     </div>
+  }
 
-  } @else if (sample(); as sample) {
 
-    @if (error()) {
-      <div class="global-error">
-        {{ error() }}
-      </div>
-    }
+  @if (loading() && !sample()) {
+    <div
+      class="sample-edit__loading"
+      role="status"
+      aria-live="polite"
+    >
+      Chargement du sample...
+    </div>
+  }
+
+
+  @if (sample(); as currentSample) {
 
     <app-sample-form
-      [initialValue]="sample"
+      [initialValue]="currentSample"
       [submitting]="submitting()"
-      (formSubmit)="updateSample($event)">
-    </app-sample-form>
+      (formSubmit)="updateSample($event)"
+    />
+
+  } @else if (!loading() && !error()) {
+
+    <div
+      class="alert alert-info"
+      role="status"
+    >
+      Aucun sample à afficher.
+    </div>
 
   }
 

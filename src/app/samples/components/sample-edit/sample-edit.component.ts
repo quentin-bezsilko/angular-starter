@@ -28,6 +28,15 @@ import {
 
 import { SampleService } from '../../service/sample.service';
 
+interface VersionConflictError {
+  title?: string;
+  detail?: string;
+  status?: number;
+  resourceId?: number;
+  requestedVersion?: number;
+  currentVersion?: number;
+}
+
 @Component({
   selector: 'app-sample-edit',
   standalone: true,
@@ -52,13 +61,20 @@ export class SampleEditComponent implements OnInit {
 
   readonly error = signal<string | null>(null);
 
+  readonly versionConflict = signal(false);
+
+  readonly versionConflictMessage =
+    signal<string | null>(null);
+
   ngOnInit(): void {
     const id = Number(
       this.route.snapshot.paramMap.get('id')
     );
 
     if (!Number.isInteger(id) || id <= 0) {
-      this.error.set('Identifiant du sample invalide.');
+      this.error.set(
+        'Identifiant du sample invalide.'
+      );
       return;
     }
 
@@ -80,7 +96,9 @@ export class SampleEditComponent implements OnInit {
     }
 
     this.submitting.set(true);
+
     this.error.set(null);
+    this.clearVersionConflict();
 
     const request: UpdateSampleRequest = {
       name: value.name,
@@ -98,6 +116,8 @@ export class SampleEditComponent implements OnInit {
       document: value.document,
       comments: value.comments,
       status: value.status,
+
+      // Version du Sample qui a été chargé.
       version: sample.version
     };
 
@@ -110,6 +130,12 @@ export class SampleEditComponent implements OnInit {
       )
       .subscribe({
         next: updatedSample => {
+          /*
+           * Le backend renvoie désormais la nouvelle
+           * version Hibernate.
+           */
+          this.sample.set(updatedSample);
+
           void this.router.navigate([
             '/samples',
             updatedSample.id
@@ -120,6 +146,16 @@ export class SampleEditComponent implements OnInit {
           this.handleUpdateError(error);
         }
       });
+  }
+
+  reloadAfterConflict(): void {
+    const sample = this.sample();
+
+    if (!sample) {
+      return;
+    }
+
+    this.loadSample(sample.id);
   }
 
   private loadSample(id: number): void {
@@ -135,7 +171,13 @@ export class SampleEditComponent implements OnInit {
       )
       .subscribe({
         next: sample => {
+          /*
+           * SampleFormComponent observe initialValue
+           * et repatche lui-même son formulaire.
+           */
           this.sample.set(sample);
+
+          this.clearVersionConflict();
         },
 
         error: (error: HttpErrorResponse) => {
@@ -172,10 +214,7 @@ export class SampleEditComponent implements OnInit {
     }
 
     if (error.status === 409) {
-      this.error.set(
-        'Ce sample a été modifié par un autre utilisateur. ' +
-        'Rechargez la page avant de réessayer.'
-      );
+      this.handleVersionConflict(error);
       return;
     }
 
@@ -189,5 +228,24 @@ export class SampleEditComponent implements OnInit {
     this.error.set(
       'Une erreur est survenue lors de la modification du sample.'
     );
+  }
+
+  private handleVersionConflict(
+    error: HttpErrorResponse
+  ): void {
+    const conflict =
+      error.error as VersionConflictError | null;
+
+    this.versionConflict.set(true);
+
+    this.versionConflictMessage.set(
+      conflict?.detail ??
+      'Ce sample a été modifié par un autre utilisateur depuis son chargement.'
+    );
+  }
+
+  private clearVersionConflict(): void {
+    this.versionConflict.set(false);
+    this.versionConflictMessage.set(null);
   }
 }
