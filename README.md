@@ -181,15 +181,11 @@ SCENARIOS A VALIDER :
 PUIS CREER LES ECRANS 
 V1 :
 
-/403
-/404
-/logout
-
-/samples (modifier le service backend pour faire de la pagination)
+/samples (backend déjà modifié pour faire de la pagination)
   Liste
   Recherche
   Filtres
-  Pagination
+  Pagination (ok)
 
 V2 :
 historique / audit

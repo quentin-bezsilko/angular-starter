@@ -1,0 +1,50 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 64px;
+  padding: 0 2rem;
+
+  background-color: #212529;
+  color: #ffffff;
+}
+
+.header__brand {
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.header__link {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.header__link:hover {
+  text-decoration: underline;
+}
+
+.header__logout {
+  padding: 0.5rem 1rem;
+
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+
+  background: transparent;
+  color: #ffffff;
+
+  cursor: pointer;
+}
+
+.header__logout:hover {
+  background-color: #ffffff;
+  color: #212529;
+}

@@ -153,6 +153,35 @@
 
     </div>
 
+    <div class="pagination">
+
+      <p class="pagination__info">
+        {{ totalElements() }} sample(s)
+        ·
+        Page {{ currentPage() + 1 }} sur {{ totalPages() }}
+      </p>
+
+      <div class="pagination__actions">
+
+        <button
+          type="button"
+          class="button"
+          [disabled]="currentPage() === 0"
+          (click)="previousPage()">
+          Précédent
+        </button>
+
+        <button
+          type="button"
+          class="button"
+          [disabled]="currentPage() + 1 >= totalPages()"
+          (click)="nextPage()">
+          Suivant
+        </button>
+
+      </div>
+
+    </div>
   }
 
 </section>

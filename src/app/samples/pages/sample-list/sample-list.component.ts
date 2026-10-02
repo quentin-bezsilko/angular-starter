@@ -5,8 +5,11 @@ import {
   OnInit,
   signal
 } from '@angular/core';
-import { finalize } from 'rxjs';
+
+import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+
+import { finalize } from 'rxjs';
 
 import {
   Sample,
@@ -14,7 +17,6 @@ import {
 } from '../../model/sample.model';
 
 import { SampleService } from '../../service/sample.service';
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-sample-list',
@@ -32,8 +34,14 @@ export class SampleListComponent implements OnInit {
   private readonly sampleService = inject(SampleService);
 
   readonly samples = signal<Sample[]>([]);
+
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
+
+  readonly totalElements = signal(0);
+  readonly totalPages = signal(0);
+  readonly currentPage = signal(0);
+  readonly pageSize = signal(8);
 
   readonly SampleStatus = SampleStatus;
 
@@ -41,20 +49,28 @@ export class SampleListComponent implements OnInit {
     this.loadSamples();
   }
 
-  loadSamples(): void {
+  loadSamples(page = this.currentPage()): void {
     this.loading.set(true);
     this.error.set(null);
 
     this.sampleService
-      .findAll()
+      .findAll(
+        page,
+        this.pageSize(),
+        'id,asc'
+      )
       .pipe(
         finalize(() => {
           this.loading.set(false);
         })
       )
       .subscribe({
-        next: samples => {
-          this.samples.set(samples);
+        next: response => {
+          this.samples.set(response.content);
+          this.currentPage.set(response.number);
+          this.pageSize.set(response.size);
+          this.totalPages.set(response.totalPages);
+          this.totalElements.set(response.totalElements);
         },
         error: () => {
           this.error.set(
@@ -62,6 +78,18 @@ export class SampleListComponent implements OnInit {
           );
         }
       });
+  }
+
+  previousPage(): void {
+    if (this.currentPage() > 0) {
+      this.loadSamples(this.currentPage() - 1);
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage() + 1 < this.totalPages()) {
+      this.loadSamples(this.currentPage() + 1);
+    }
   }
 
   statusLabel(status: SampleStatus): string {

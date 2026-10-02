@@ -172,3 +172,27 @@ tbody tr:hover {
 
   border: 0;
 }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 1.5rem;
+  gap: 1rem;
+}
+
+.pagination__info {
+  margin: 0;
+  color: #6c757d;
+}
+
+.pagination__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pagination .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

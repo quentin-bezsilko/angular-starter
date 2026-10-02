@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Page } from '../model/page.model';
 
 import { Sample, CreateSampleRequest, UpdateSampleRequest } from '../model/sample.model';
 
@@ -13,8 +14,21 @@ export class SampleService {
 
   private readonly apiUrl = 'http://localhost:8080/springstarter/api/v1/samples';
 
-  findAll(): Observable<Sample[]> {
-    return this.http.get<Sample[]>(this.apiUrl);
+  findAll(
+    page = 0,
+    size = 20,
+    sort = 'id,desc'
+  ): Observable<Page<Sample>> {
+    return this.http.get<Page<Sample>>(
+      this.apiUrl,
+      {
+        params: {
+          page,
+          size,
+          sort
+        }
+      }
+    );
   }
 
   findById(id: number): Observable<Sample> {

@@ -1,0 +1,30 @@
+<header class="header">
+
+  <a
+    class="header__brand"
+    routerLink="/">
+    Spring Starter
+  </a>
+
+  @if (authService.isAuthenticated()) {
+
+    <nav class="header__nav">
+
+      <a
+        class="header__link"
+        routerLink="/samples">
+        Samples
+      </a>
+
+      <button
+        type="button"
+        class="header__logout"
+        (click)="logout()">
+        Déconnexion
+      </button>
+
+    </nav>
+
+  }
+
+</header>

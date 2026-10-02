@@ -9,6 +9,7 @@ export const routes: Routes = [
       import('./login/login.component')
         .then(m => m.LoginComponent)
   },
+
   {
     path: '',
     canActivateChild: [authChildGuard],
@@ -20,35 +21,47 @@ export const routes: Routes = [
             .then(m => m.SampleListComponent)
       },
       {
+        path: 'samples/new',
+        loadComponent: () =>
+          import('./samples/components/sample-create/sample-create.component')
+            .then(m => m.SampleCreateComponent)
+      },
+      {
+        path: 'samples/:id/edit',
+        loadComponent: () =>
+          import('./samples/components/sample-edit/sample-edit.component')
+            .then(m => m.SampleEditComponent)
+      },
+      {
+        path: 'samples/:id',
+        loadComponent: () =>
+          import('./samples/pages/sample-detail/sample-detail.component')
+            .then(m => m.SampleDetailComponent)
+      },
+      {
         path: '',
         pathMatch: 'full',
         redirectTo: 'samples'
       }
     ]
   },
+
   {
-    path: 'samples/new',
+    path: '403',
     loadComponent: () =>
-      import(
-        './samples/components/sample-create/sample-create.component'
-      ).then(m => m.SampleCreateComponent)
+      import('./pages/forbidden/forbidden.component')
+        .then(m => m.ForbiddenComponent)
   },
+
   {
-    path: 'samples/:id/edit',
+    path: '404',
     loadComponent: () =>
-    import(
-    './samples/components/sample-edit/sample-edit.component'
-    ).then(m => m.SampleEditComponent)
+      import('./pages/not-found/not-found.component')
+        .then(m => m.NotFoundComponent)
   },
-  {
-    path: 'samples/:id',
-    loadComponent: () =>
-      import(
-        './samples/pages/sample-detail/sample-detail.component'
-      ).then(m => m.SampleDetailComponent)
-  },
+
   {
     path: '**',
-    redirectTo: 'samples'
+    redirectTo: '404'
   }
 ];
