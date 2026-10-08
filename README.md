@@ -178,14 +178,9 @@ SCENARIOS A VALIDER :
 ✅ F5 après logout
    session non restaurée
 
-PUIS CREER LES ECRANS 
-V1 :
+PUIS CREER LES ECRANS
 
-/samples (backend déjà modifié pour faire de la pagination)
-  Liste
-  Recherche
-  Filtres
-  Pagination (ok)
+v1 : Terminée
 
 V2 :
 historique / audit

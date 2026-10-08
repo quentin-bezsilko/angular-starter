@@ -1,9 +1,11 @@
 import { inject } from '@angular/core';
-import {
+import type {
   CanActivateChildFn,
   CanActivateFn,
-  Router,
   UrlTree
+} from '@angular/router';
+import {
+  Router
 } from '@angular/router';
 
 import { AuthService } from './auth.service';

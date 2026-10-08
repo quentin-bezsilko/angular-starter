@@ -196,3 +196,84 @@ tbody tr:hover {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
+
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+
+  background-color: #f8fafc;
+}
+
+.filters__search {
+  flex: 1 1 15rem;
+}
+
+.filters__field {
+  flex: 0 1 10rem;
+}
+
+.filters__search,
+.filters__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+
+  label {
+    color: #475569;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  input,
+  select {
+    min-height: 1rem;
+    padding: 0.5rem 0.75rem;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+
+    background-color: white;
+    color: #0f172a;
+  }
+
+  input:focus,
+  select:focus {
+    outline: 2px solid #93c5fd;
+    outline-offset: 1px;
+
+    border-color: #2563eb;
+  }
+}
+
+.filters__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.sort-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  color: inherit;
+  font: inherit;
+
+  cursor: pointer;
+
+  &:hover {
+    color: #2563eb;
+  }
+}

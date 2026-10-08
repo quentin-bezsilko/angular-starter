@@ -4,7 +4,7 @@ import {
   signal
 } from '@angular/core';
 
-import { HttpErrorResponse } from '@angular/common/http';
+import type { HttpErrorResponse } from '@angular/common/http';
 
 import {
   FormBuilder,

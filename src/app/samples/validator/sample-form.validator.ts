@@ -1,4 +1,4 @@
-import {
+import type {
   AbstractControl,
   ValidationErrors,
   ValidatorFn
@@ -18,7 +18,10 @@ export const sampleValidator: ValidatorFn = (
 
   const errors: ValidationErrors = {};
 
-  if (active === true && (stock === null || stock <= 0)) {
+  if (
+    active === true &&
+    (stock === null || stock <= 0)
+  ) {
     errors['activeRequiresStock'] = true;
   }
 
@@ -74,7 +77,7 @@ export function positiveValidator(
   control: AbstractControl
 ): ValidationErrors | null {
 
-  const value = control.value;
+  const value: unknown = control.value;
 
   if (
     value === null ||
@@ -84,16 +87,26 @@ export function positiveValidator(
     return null;
   }
 
-  return Number(value) > 0
+  if (
+    typeof value !== 'number' &&
+    typeof value !== 'string'
+  ) {
+    return { positive: true };
+  }
+
+  const numericValue = Number(value);
+
+  return Number.isFinite(numericValue) &&
+    numericValue > 0
     ? null
     : { positive: true };
-};
+}
 
 export function maxTwoDecimalsValidator(
   control: AbstractControl
 ): ValidationErrors | null {
 
-  const value = control.value;
+  const value: unknown = control.value;
 
   if (
     value === null ||
@@ -101,6 +114,13 @@ export function maxTwoDecimalsValidator(
     value === ''
   ) {
     return null;
+  }
+
+  if (
+    typeof value !== 'number' &&
+    typeof value !== 'string'
+  ) {
+    return { decimalFormat: true };
   }
 
   return /^\d{1,13}(\.\d{1,2})?$/.test(
@@ -108,4 +128,4 @@ export function maxTwoDecimalsValidator(
   )
     ? null
     : { decimalFormat: true };
-};
+}

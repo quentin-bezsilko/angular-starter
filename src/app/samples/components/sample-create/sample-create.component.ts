@@ -13,10 +13,10 @@ import {
 import { finalize } from 'rxjs';
 
 import { SampleFormComponent } from '../../components/sample-form/sample-form.component';
-import { SampleFormValue } from '../../components/sample-form/sample-form.component';
+import type { SampleFormValue } from '../../components/sample-form/sample-form.component';
 
 import { SampleService } from '../../service/sample.service';
-import { CreateSampleRequest } from '../../model/sample.model';
+import type { CreateSampleRequest } from '../../model/sample.model';
 
 @Component({
   selector: 'app-sample-create',

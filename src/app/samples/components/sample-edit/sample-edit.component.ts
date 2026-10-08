@@ -1,12 +1,13 @@
+import type {
+  OnInit} from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  OnInit,
   signal
 } from '@angular/core';
 
-import { HttpErrorResponse } from '@angular/common/http';
+import type { HttpErrorResponse } from '@angular/common/http';
 
 import {
   ActivatedRoute,
@@ -16,14 +17,16 @@ import {
 
 import { finalize } from 'rxjs';
 
-import {
+import type {
   Sample,
   UpdateSampleRequest
 } from '../../model/sample.model';
 
-import {
-  SampleFormComponent,
+import type {
   SampleFormValue
+} from '../../components/sample-form/sample-form.component';
+import {
+  SampleFormComponent
 } from '../../components/sample-form/sample-form.component';
 
 import { SampleService } from '../../service/sample.service';

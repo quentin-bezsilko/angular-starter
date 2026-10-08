@@ -1,8 +1,8 @@
+import type { OnInit } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  OnInit,
   signal
 } from '@angular/core';
 
@@ -13,11 +13,12 @@ import {
   RouterLink
 } from '@angular/router';
 
-import { HttpErrorResponse } from '@angular/common/http';
+import type { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs';
 
+import type {
+  Sample} from '../../model/sample.model';
 import {
-  Sample,
   SampleStatus
 } from '../../model/sample.model';
 

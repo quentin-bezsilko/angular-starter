@@ -13,6 +13,102 @@
     </a>
   </header>
 
+  <div class="filters">
+
+  <div class="filters__search">
+    <label for="sample-search">
+      Rechercher
+    </label>
+
+    <input
+    id="sample-search"
+    type="search"
+    placeholder="Nom, description, commentaire..."
+    [ngModel]="search()"
+    (ngModelChange)="onSearchChange($event)">
+  </div>
+
+  <div class="filters__field">
+    <label for="status-filter">
+      Statut
+    </label>
+
+    <select
+      id="status-filter"
+      [ngModel]="statusFilter()"
+      (ngModelChange)="statusFilter.set($event); applyFilters()">
+
+      <option value="">
+        Tous
+      </option>
+
+      @for (status of statuses; track status) {
+        <option [value]="status">
+          {{ statusLabel(status) }}
+        </option>
+      }
+
+    </select>
+  </div>
+
+  <div class="filters__field">
+    <label for="category-filter">
+      Catégorie
+    </label>
+
+    <input
+      id="category-filter"
+      type="text"
+      maxlength="1"
+      placeholder="A"
+      [ngModel]="categoryFilter()"
+      (ngModelChange)="categoryFilter.set($event)"
+      (keyup.enter)="applyFilters()">
+  </div>
+
+  <div class="filters__field">
+    <label for="active-filter">
+      Actif
+    </label>
+
+    <select
+      id="active-filter"
+      [ngModel]="activeFilter()"
+      (ngModelChange)="activeFilter.set(
+        $event === '' ? undefined : $event === 'true'
+      ); applyFilters()">
+
+      <option value="">
+        Tous
+      </option>
+
+      <option value="true">
+        Oui
+      </option>
+
+      <option value="false">
+        Non
+      </option>
+
+    </select>
+  </div>
+
+  <div class="filters__actions">
+      <button
+        type="button"
+        class="button button--primary"
+        (click)="applyFilters()">
+        Rechercher
+      </button>
+      <button
+        type="button"
+        class="button"
+        (click)="resetFilters()">
+        Réinitialiser
+      </button>
+    </div>
+  </div>
+
   @if (loading()) {
 
     <div class="state">
@@ -55,14 +151,78 @@
       <table>
         <thead>
           <tr>
-            <th>Nom</th>
-            <th>Statut</th>
-            <th>Catégorie</th>
-            <th>Quantité</th>
-            <th>Stock</th>
-            <th>Prix</th>
-            <th>Actif</th>
-            <th>Créé le</th>
+            <th>
+  <button
+    type="button"
+    class="sort-button"
+    (click)="sortBy('name')">
+    Nom
+    <span>{{ sortSymbol('name') }}</span>
+  </button>
+</th>
+            <th>
+  <button
+    type="button"
+    class="sort-button"
+    (click)="sortBy('status')">
+    Statut
+    <span>{{ sortSymbol('status') }}</span>
+  </button>
+</th>
+            <th>
+  <button
+    type="button"
+    class="sort-button"
+    (click)="sortBy('category')">
+    Catégorie
+    <span>{{ sortSymbol('category') }}</span>
+  </button>
+</th>
+            <th>
+  <button
+    type="button"
+    class="sort-button"
+    (click)="sortBy('quantity')">
+    Quantité
+    <span>{{ sortSymbol('quantity') }}</span>
+  </button>
+</th>
+            <th>
+  <button
+    type="button"
+    class="sort-button"
+    (click)="sortBy('stock')">
+    Stock
+    <span>{{ sortSymbol('stock') }}</span>
+  </button>
+</th>
+            <th>
+  <button
+    type="button"
+    class="sort-button"
+    (click)="sortBy('price')">
+    Prix
+    <span>{{ sortSymbol('price') }}</span>
+  </button>
+</th>
+            <th>
+  <button
+    type="button"
+    class="sort-button"
+    (click)="sortBy('active')">
+    Actif
+    <span>{{ sortSymbol('active') }}</span>
+  </button>
+</th>
+           <th>
+  <button
+    type="button"
+    class="sort-button"
+    (click)="sortBy('createdAt')">
+    Créé le
+    <span>{{ sortSymbol('createdAt') }}</span>
+  </button>
+</th>
             <th>
               <span class="visually-hidden">
                 Actions

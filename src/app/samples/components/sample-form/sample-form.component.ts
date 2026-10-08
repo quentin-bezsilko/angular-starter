@@ -13,8 +13,9 @@ import {
   Validators
 } from '@angular/forms';
 
+import type {
+  Sample} from '../../model/sample.model';
 import {
-  Sample,
   SampleStatus
 } from '../../model/sample.model';
 

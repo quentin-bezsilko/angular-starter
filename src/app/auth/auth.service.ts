@@ -1,15 +1,16 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import type {
+  Observable} from 'rxjs';
 import {
   catchError,
   finalize,
-  Observable,
   of,
   shareReplay,
   tap
 } from 'rxjs';
 
-import {
+import type {
   LoginRequest,
   TokenResponse
 } from './auth.model';

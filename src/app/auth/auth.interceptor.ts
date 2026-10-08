@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import {
+import type {
   HttpErrorResponse,
   HttpEvent,
   HttpInterceptorFn,
@@ -7,9 +7,10 @@ import {
 } from '@angular/common/http';
 import { Router } from '@angular/router';
 
+import type {
+  Observable} from 'rxjs';
 import {
   catchError,
-  Observable,
   switchMap,
   throwError
 } from 'rxjs';
@@ -153,17 +154,17 @@ export const authInterceptor: HttpInterceptorFn = (
          * vers la page de connexion en conservant
          * l'URL demandée.
          */
-        catchError(refreshError => {
-          authService.clearAccessToken();
+        catchError((refreshError: unknown) => {
+  authService.clearAccessToken();
 
-          void router.navigate(['/login'], {
-            queryParams: {
-              returnUrl: router.url
-            }
-          });
+  void router.navigate(['/login'], {
+    queryParams: {
+      returnUrl: router.url
+    }
+  });
 
-          return throwError(() => refreshError);
-        })
+  return throwError(() => refreshError);
+})
       );
     })
   );

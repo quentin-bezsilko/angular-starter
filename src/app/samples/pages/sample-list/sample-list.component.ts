@@ -1,29 +1,40 @@
+import type {
+  OnInit} from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  OnInit,
   signal
 } from '@angular/core';
 
 import { DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
-import { finalize } from 'rxjs';
-
 import {
-  Sample,
+  debounceTime,
+  distinctUntilChanged,
+  finalize,
+  Subject
+} from 'rxjs';
+
+import type {
+  Sample} from '../../model/sample.model';
+import {
   SampleStatus
 } from '../../model/sample.model';
 
 import { SampleService } from '../../service/sample.service';
+
+type SortDirection = 'asc' | 'desc';
 
 @Component({
   selector: 'app-sample-list',
   standalone: true,
   imports: [
     RouterLink,
-    DatePipe
+    DatePipe,
+    FormsModule
   ],
   templateUrl: './sample-list.component.html',
   styleUrl: './sample-list.component.scss',
@@ -43,21 +54,54 @@ export class SampleListComponent implements OnInit {
   readonly currentPage = signal(0);
   readonly pageSize = signal(8);
 
+  private readonly searchSubject = new Subject<string>();
+
+  readonly search = signal('');
+  readonly statusFilter = signal<SampleStatus | ''>('');
+  readonly categoryFilter = signal('');
+  readonly activeFilter = signal<boolean | undefined>(undefined);
+
+  readonly sortColumn = signal('id');
+  readonly sortDirection = signal<SortDirection>('desc');
+
   readonly SampleStatus = SampleStatus;
 
+  readonly statuses = Object.values(SampleStatus);
+
   ngOnInit(): void {
+    this.searchSubject
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe(search => {
+        this.search.set(search);
+        this.loadSamples(0);
+      });
+
     this.loadSamples();
+  }
+
+  onSearchChange(value: string): void {
+    this.searchSubject.next(value.trim());
   }
 
   loadSamples(page = this.currentPage()): void {
     this.loading.set(true);
     this.error.set(null);
 
+    const sort =
+      `${this.sortColumn()},${this.sortDirection()}`;
+
     this.sampleService
       .findAll(
         page,
         this.pageSize(),
-        'id,asc'
+        sort,
+        this.search(),
+        this.statusFilter() || undefined,
+        this.categoryFilter() || undefined,
+        this.activeFilter()
       )
       .pipe(
         finalize(() => {
@@ -78,6 +122,42 @@ export class SampleListComponent implements OnInit {
           );
         }
       });
+  }
+
+  applyFilters(): void {
+    this.loadSamples(0);
+  }
+
+  resetFilters(): void {
+    this.search.set('');
+    this.statusFilter.set('');
+    this.categoryFilter.set('');
+    this.activeFilter.set(undefined);
+
+    this.loadSamples(0);
+  }
+
+  sortBy(column: string): void {
+    if (this.sortColumn() === column) {
+      this.sortDirection.update(direction =>
+        direction === 'asc' ? 'desc' : 'asc'
+      );
+    } else {
+      this.sortColumn.set(column);
+      this.sortDirection.set('asc');
+    }
+
+    this.loadSamples(0);
+  }
+
+  sortSymbol(column: string): string {
+    if (this.sortColumn() !== column) {
+      return '↕';
+    }
+
+    return this.sortDirection() === 'asc'
+      ? '↑'
+      : '↓';
   }
 
   previousPage(): void {
