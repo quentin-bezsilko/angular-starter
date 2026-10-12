@@ -8,3 +8,7 @@ export interface TokenResponse {
   tokenType: string;
   expiresIn: number;
 }
+
+export interface JwtPayload {
+  authorities?: string[];
+}

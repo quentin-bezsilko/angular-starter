@@ -184,14 +184,13 @@ v1 : Terminée
 - Liste des samples
 - Recherche avec filtres
 - Consultation détail
-- Création, Modification, Duplication d'un sample
+- Création, Modification, Duplication, Suppression d'un sample
 - Routing, Service, Authentification, Filter et Guard
 
 V2 :
-suppression d'un sample à implémenter
-historique / audit
 export CSV/Excel
 import en masse
+historique / audit
 sélection multiple et actions groupées
 archivage plutôt que suppression physique
 dashboard avec quelques statistiques

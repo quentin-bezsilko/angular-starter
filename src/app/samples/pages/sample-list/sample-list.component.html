@@ -293,23 +293,48 @@
               </td>
 
               <td class="actions">
-                <a
-                  [routerLink]="['/samples', sample.id]">
-                  Consulter
-                </a>
+                @if (canRead()) {
+                  <a
+                    [routerLink]="['/samples', sample.id]"
+                    class="action-icon"
+                    title="Consulter le sample"
+                    aria-label="Consulter le sample">
+                    🔍
+                  </a>
+                }
 
-                <a
-                  [routerLink]="['/samples', sample.id, 'edit']">
-                  Modifier
-                </a>
+                @if (canWrite()) {
 
-                <button
-                  type="button"
-                  class="action-link"
-                  [disabled]="loading()"
-                  (click)="duplicate(sample.id)">
-                  Dupliquer
-                </button>
+                  <a
+                    [routerLink]="['/samples', sample.id, 'edit']"
+                    class="action-icon"
+                    title="Modifier le sample"
+                    aria-label="Modifier le sample">
+                    ✏️
+                  </a>
+
+                  <button
+                    type="button"
+                    class="action-icon"
+                    [disabled]="loading()"
+                    (click)="duplicate(sample.id)"
+                    title="Dupliquer le sample"
+                    aria-label="Dupliquer le sample">
+                    📋
+                  </button>
+
+                  <button
+                    type="button"
+                    class="action-icon action-icon--danger"
+                    [disabled]="loading()"
+                    (click)="delete(sample.id)"
+                    title="Supprimer le sample"
+                    aria-label="Supprimer le sample">
+                    🗑️
+                  </button>
+
+                }
+
               </td>
 
             </tr>

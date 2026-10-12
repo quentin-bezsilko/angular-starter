@@ -1,19 +1,8 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import type {
-  Observable} from 'rxjs';
-import {
-  catchError,
-  finalize,
-  of,
-  shareReplay,
-  tap
-} from 'rxjs';
-
-import type {
-  LoginRequest,
-  TokenResponse
-} from './auth.model';
+import type { Observable } from 'rxjs';
+import { catchError, finalize, of, shareReplay, tap } from 'rxjs';
+import type { JwtPayload, LoginRequest, TokenResponse } from './auth.model';
 
 @Injectable({
   providedIn: 'root'
@@ -97,6 +86,33 @@ export class AuthService {
           })
         );
   }
+
+  private parseJwt(token: string): JwtPayload {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload)) as JwtPayload;
+  }
+
+  readonly authorities = computed<readonly string[]>(() => {
+    const token = this.accessToken();
+
+    if (!token) {
+      return [];
+    }
+
+    try {
+      return this.parseJwt(token).authorities ?? [];
+    } catch {
+      return [];
+    }
+  });
+
+  readonly canRead = computed(() =>
+    this.authorities().includes('READ')
+  );
+
+  readonly canWrite = computed(() =>
+    this.authorities().includes('WRITE')
+  );
 
   clearAccessToken(): void {
     this.accessTokenSignal.set(null);

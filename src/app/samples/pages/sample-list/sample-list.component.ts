@@ -25,6 +25,7 @@ import {
 } from '../../model/sample.model';
 
 import { SampleService } from '../../service/sample.service';
+import { AuthService } from '../../../auth/auth.service';
 
 type SortDirection = 'asc' | 'desc';
 
@@ -67,6 +68,10 @@ export class SampleListComponent implements OnInit {
   readonly SampleStatus = SampleStatus;
 
   readonly statuses = Object.values(SampleStatus);
+
+  private readonly authService = inject(AuthService);
+  readonly canRead = this.authService.canRead;
+  readonly canWrite = this.authService.canWrite;
 
   ngOnInit(): void {
     this.searchSubject
@@ -141,6 +146,37 @@ export class SampleListComponent implements OnInit {
         error: () => {
           this.error.set(
             'Une erreur est survenue lors de la duplication du sample.'
+          );
+        }
+      });
+  }
+
+  delete(id: number): void {
+    const confirmed = window.confirm(
+      'Êtes-vous sûr de vouloir supprimer ce sample ?'
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.sampleService
+      .delete(id)
+      .pipe(
+        finalize(() => {
+          this.loading.set(false);
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.loadSamples();
+        },
+        error: () => {
+          this.error.set(
+            'Une erreur est survenue lors de la suppression du sample.'
           );
         }
       });
