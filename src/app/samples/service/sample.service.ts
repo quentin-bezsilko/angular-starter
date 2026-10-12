@@ -92,4 +92,25 @@ export class SampleService {
       {}
     );
   }
+
+  export(search?: string, status?: SampleStatus, category?: string, active?: boolean) {
+    let params = new HttpParams();
+    if (search) {
+      params = params.set('search', search);
+    }
+    if (status) {
+      params = params.set('status', status);
+    }
+    if (category) {
+      params = params.set('category', category);
+    }
+    if (active !== undefined) {
+      params = params.set('active', active);
+    }
+    return this.http.get(`${this.apiUrl}/export`, {
+        params,
+        responseType: 'blob'
+      }
+    );
+  }
 }

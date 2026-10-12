@@ -188,7 +188,7 @@ v1 : Terminée
 - Routing, Service, Authentification, Filter et Guard
 
 V2 :
-export CSV/Excel
+export CSV/Excel (ok)
 import en masse
 historique / audit
 sélection multiple et actions groupées

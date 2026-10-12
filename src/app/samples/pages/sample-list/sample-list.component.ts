@@ -95,38 +95,35 @@ export class SampleListComponent implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    const sort =
-      `${this.sortColumn()},${this.sortDirection()}`;
-
-    this.sampleService
-      .findAll(
-        page,
-        this.pageSize(),
-        sort,
-        this.search(),
-        this.statusFilter() || undefined,
-        this.categoryFilter() || undefined,
-        this.activeFilter()
-      )
-      .pipe(
-        finalize(() => {
-          this.loading.set(false);
-        })
-      )
-      .subscribe({
-        next: response => {
-          this.samples.set(response.content);
-          this.currentPage.set(response.number);
-          this.pageSize.set(response.size);
-          this.totalPages.set(response.totalPages);
-          this.totalElements.set(response.totalElements);
-        },
-        error: () => {
-          this.error.set(
-            'Une erreur est survenue lors du chargement des samples.'
-          );
-        }
-      });
+    const sort = `${this.sortColumn()},${this.sortDirection()}`;
+    const filters = this.getFilters();
+    this.sampleService.findAll(
+      page,
+      this.pageSize(),
+      sort,
+      filters.search,
+      filters.status,
+      filters.category,
+      filters.active
+    ).pipe(
+      finalize(() => {
+        this.loading.set(false);
+      })
+    )
+    .subscribe({
+      next: response => {
+        this.samples.set(response.content);
+        this.currentPage.set(response.number);
+        this.pageSize.set(response.size);
+        this.totalPages.set(response.totalPages);
+        this.totalElements.set(response.totalElements);
+      },
+      error: () => {
+        this.error.set(
+          'Une erreur est survenue lors du chargement des samples.'
+        );
+      }
+    });
   }
 
   duplicate(id: number): void {
@@ -180,6 +177,56 @@ export class SampleListComponent implements OnInit {
           );
         }
       });
+  }
+
+  exportExcel(): void {
+    this.loading.set(true);
+    this.error.set(null);
+
+    const filters = this.getFilters();
+
+    this.sampleService.export(
+      filters.search,
+      filters.status,
+      filters.category,
+      filters.active
+    ).pipe(
+      finalize(() => {
+        this.loading.set(false);
+      })
+    ).subscribe({
+      next: blob => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+
+        const date = new Date()
+          .toISOString()
+          .split('T')[0];
+
+        link.download = `samples-${date}.xlsx`;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.error.set(
+          'Une erreur est survenue lors de l’export des samples.'
+        );
+      }
+    });
+  }
+  
+  private getFilters() {
+    return {
+      search: this.search() || undefined,
+      status: this.statusFilter() || undefined,
+      category: this.categoryFilter() || undefined,
+      active: this.activeFilter()
+    };
   }
 
   applyFilters(): void {
