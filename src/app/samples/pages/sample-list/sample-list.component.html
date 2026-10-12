@@ -302,6 +302,14 @@
                   [routerLink]="['/samples', sample.id, 'edit']">
                   Modifier
                 </a>
+
+                <button
+                  type="button"
+                  class="action-link"
+                  [disabled]="loading()"
+                  (click)="duplicate(sample.id)">
+                  Dupliquer
+                </button>
               </td>
 
             </tr>

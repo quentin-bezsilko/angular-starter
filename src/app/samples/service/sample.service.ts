@@ -85,4 +85,11 @@ export class SampleService {
       `${this.apiUrl}/${id}`
     );
   }
+
+  duplicate(id: number) {
+    return this.http.post<Sample>(
+      `${this.apiUrl}/${id}/duplicate`,
+      {}
+    );
+  }
 }

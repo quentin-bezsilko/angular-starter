@@ -124,6 +124,28 @@ export class SampleListComponent implements OnInit {
       });
   }
 
+  duplicate(id: number): void {
+    this.loading.set(true);
+
+    this.sampleService
+      .duplicate(id)
+      .pipe(
+        finalize(() => {
+          this.loading.set(false);
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.loadSamples();
+        },
+        error: () => {
+          this.error.set(
+            'Une erreur est survenue lors de la duplication du sample.'
+          );
+        }
+      });
+  }
+
   applyFilters(): void {
     this.loadSamples(0);
   }

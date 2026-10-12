@@ -181,10 +181,15 @@ SCENARIOS A VALIDER :
 PUIS CREER LES ECRANS
 
 v1 : Terminée
+- Liste des samples
+- Recherche avec filtres
+- Consultation détail
+- Création, Modification, Duplication d'un sample
+- Routing, Service, Authentification, Filter et Guard
 
 V2 :
+suppression d'un sample à implémenter
 historique / audit
-duplication d’un sample
 export CSV/Excel
 import en masse
 sélection multiple et actions groupées

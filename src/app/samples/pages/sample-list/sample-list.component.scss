@@ -277,3 +277,27 @@ tbody tr:hover {
     color: #2563eb;
   }
 }
+
+.actions {
+  button.action-link {
+    padding: 0;
+
+    border: none;
+    background: none;
+
+    color: #2563eb;
+    font: inherit;
+    text-decoration: none;
+
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
