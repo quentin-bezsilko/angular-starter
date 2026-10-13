@@ -1,0 +1,129 @@
+<section class="sample-list">
+  <header class="sample-list__header">
+    <div>
+      <h1>Corbeille</h1>
+      <p>Samples supprimés pouvant être restaurés.</p>
+    </div>
+
+    <a class="button" routerLink="/samples"> ← Retour à la liste </a>
+  </header>
+
+  @if (hasSelection()) {
+    <div class="bulk-actions">
+      <span>{{ selectedCount() }} sample(s) sélectionné(s)</span>
+
+      <button type="button" class="button" (click)="bulkRestore()">
+        ♻️ Restaurer
+      </button>
+
+      <button
+        type="button"
+        class="button button--danger"
+        (click)="bulkDeleteForever()"
+      >
+        ❌ Supprimer définitivement
+      </button>
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="state">Chargement...</div>
+  } @else if (error()) {
+    <div class="state state--error">
+      {{ error() }}
+    </div>
+  } @else if (samples().length === 0) {
+    <div class="state">
+      <h2>Corbeille vide</h2>
+    </div>
+  } @else {
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>
+              <button
+                type="button"
+                class="sort-button"
+                (click)="sortBy('name')"
+              >
+                Nom
+                <span>{{ sortSymbol("name") }}</span>
+              </button>
+            </th>
+            <th>
+              <button
+                type="button"
+                class="sort-button"
+                (click)="sortBy('category')"
+              >
+                Catégorie
+                <span>{{ sortSymbol("category") }}</span>
+              </button>
+            </th>
+
+            <th>
+              <button
+                type="button"
+                class="sort-button"
+                (click)="sortBy('createdAt')"
+              >
+                Créé le
+                <span>{{ sortSymbol("createdAt") }}</span>
+              </button>
+            </th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (sample of samples(); track sample.id) {
+            <tr>
+              <td>
+                <input
+                  type="checkbox"
+                  (change)="
+                    toggleSelection(sample.id, $any($event.target).checked)
+                  "
+                />
+              </td>
+
+              <td>{{ sample.name }}</td>
+
+              <td>{{ sample.category }}</td>
+
+              <td>
+                @if (sample.createdAt) {
+                  {{ sample.createdAt | date: "dd/MM/yyyy HH:mm" }}
+                } @else {
+                  —
+                }
+              </td>
+
+              <td class="actions">
+                <button
+                  type="button"
+                  class="action-icon"
+                  (click)="restore(sample.id)"
+                  title="Restaurer"
+                >
+                  ♻️
+                </button>
+
+                <button
+                  type="button"
+                  class="action-icon action-icon--danger"
+                  (click)="deleteForever(sample.id)"
+                  title="Supprimer définitivement"
+                >
+                  ❌
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

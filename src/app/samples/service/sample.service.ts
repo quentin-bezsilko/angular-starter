@@ -5,11 +5,11 @@ import type { Observable } from "rxjs";
 import type { Page } from "../model/page.model";
 import type {
   Sample,
-  SampleStatus,
   CreateSampleRequest,
   UpdateSampleRequest,
   ImportResult,
 } from "../model/sample.model";
+import { SampleStatus } from "../model/sample.model";
 
 @Injectable({
   providedIn: "root",
@@ -27,11 +27,13 @@ export class SampleService {
     status?: SampleStatus,
     category?: string,
     active?: boolean,
+    includeDeleted = false,
   ): Observable<Page<Sample>> {
     let params = new HttpParams()
       .set("page", page)
       .set("size", size)
-      .set("sort", sort);
+      .set("sort", sort)
+      .set("includeDeleted", includeDeleted);
 
     if (search?.trim()) {
       params = params.set("search", search.trim());
@@ -64,11 +66,23 @@ export class SampleService {
     return this.http.put<Sample>(`${this.apiUrl}/${id}`, request);
   }
 
+  updateStatus(id: number, status: SampleStatus): Observable<Sample> {
+    return this.http.patch<Sample>(`${this.apiUrl}/${id}/status`, { status });
+  }
+
+  archive(id: number): Observable<Sample> {
+    return this.updateStatus(id, SampleStatus.ARCHIVED);
+  }
+
+  moveToTrash(id: number): Observable<Sample> {
+    return this.updateStatus(id, SampleStatus.DELETED);
+  }
+
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  duplicate(id: number) {
+  duplicate(id: number): Observable<Sample> {
     return this.http.post<Sample>(`${this.apiUrl}/${id}/duplicate`, {});
   }
 
@@ -77,8 +91,10 @@ export class SampleService {
     status?: SampleStatus,
     category?: string,
     active?: boolean,
+    includeDeleted = false,
   ) {
-    let params = new HttpParams();
+    let params = new HttpParams().set("includeDeleted", includeDeleted);
+
     if (search) {
       params = params.set("search", search);
     }

@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { BulkResult } from "../model/sample-bulk.model";
+import type { Observable } from "rxjs";
+import type { BulkResult } from "../model/sample-bulk.model";
 import { SampleStatus } from "../model/sample.model";
 
 @Injectable({
@@ -28,6 +28,10 @@ export class SampleBulkService {
       ids,
       status,
     });
+  }
+
+  bulkMoveToTrash(ids: number[]): Observable<BulkResult> {
+    return this.bulkUpdateStatus(ids, SampleStatus.DELETED);
   }
 
   bulkExport(ids: number[]): Observable<Blob> {

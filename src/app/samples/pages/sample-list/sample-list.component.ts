@@ -54,7 +54,9 @@ export class SampleListComponent implements OnInit {
 
   readonly SampleStatus = SampleStatus;
 
-  readonly statuses = Object.values(SampleStatus);
+  readonly statuses = Object.values(SampleStatus).filter(
+    (status) => status !== SampleStatus.DELETED,
+  );
 
   private readonly authService = inject(AuthService);
   readonly canRead = this.authService.canRead;
@@ -137,9 +139,9 @@ export class SampleListComponent implements OnInit {
       });
   }
 
-  delete(id: number): void {
+  moveToTrash(id: number): void {
     const confirmed = window.confirm(
-      "Êtes-vous sûr de vouloir supprimer ce sample ?",
+      "Êtes-vous sûr de vouloir déplacer ce sample dans la corbeille ?",
     );
 
     if (!confirmed) {
@@ -150,7 +152,7 @@ export class SampleListComponent implements OnInit {
     this.error.set(null);
 
     this.sampleService
-      .delete(id)
+      .moveToTrash(id)
       .pipe(
         finalize(() => {
           this.loading.set(false);
@@ -162,7 +164,7 @@ export class SampleListComponent implements OnInit {
         },
         error: () => {
           this.error.set(
-            "Une erreur est survenue lors de la suppression du sample.",
+            "Une erreur est survenue lors du déplacement du sample dans la corbeille.",
           );
         },
       });
@@ -293,7 +295,7 @@ export class SampleListComponent implements OnInit {
         return "Archivé";
 
       case SampleStatus.DELETED:
-        return "Supprimé";
+        return "Dans la corbeille";
     }
   }
 
@@ -347,21 +349,18 @@ export class SampleListComponent implements OnInit {
     return this.selectedIds().size > 0;
   }
 
-  bulkDelete(): void {
+  bulkUpdateStatus(status: SampleStatus): void {
     const ids = this.getSelectedIds();
-    if (ids.length === 0) {
-      return;
-    }
-    const confirmed = window.confirm(`Supprimer ${ids.length} sample(s) ?`);
 
-    if (!confirmed) {
+    if (ids.length === 0) {
       return;
     }
 
     this.loading.set(true);
+    this.error.set(null);
 
     this.sampleBulkService
-      .bulkDelete(ids)
+      .bulkUpdateStatus(ids, status)
       .pipe(
         finalize(() => {
           this.loading.set(false);
@@ -374,7 +373,7 @@ export class SampleListComponent implements OnInit {
         },
         error: () => {
           this.error.set(
-            "Une erreur est survenue lors de la suppression groupée.",
+            "Une erreur est survenue lors de la mise à jour groupée.",
           );
         },
       });
@@ -388,6 +387,7 @@ export class SampleListComponent implements OnInit {
     }
 
     this.loading.set(true);
+    this.error.set(null);
 
     this.sampleBulkService
       .bulkDuplicate(ids)
@@ -417,6 +417,7 @@ export class SampleListComponent implements OnInit {
     }
 
     this.loading.set(true);
+    this.error.set(null);
 
     this.sampleBulkService
       .bulkExport(ids)
@@ -448,17 +449,24 @@ export class SampleListComponent implements OnInit {
       });
   }
 
-  bulkUpdateStatus(status: SampleStatus): void {
+  bulkMoveToTrash(): void {
     const ids = this.getSelectedIds();
 
     if (ids.length === 0) {
       return;
     }
+    const confirmed = window.confirm(
+      `Déplacer ${ids.length} sample(s) dans la corbeille ?`,
+    );
+    if (!confirmed) {
+      return;
+    }
 
     this.loading.set(true);
+    this.error.set(null);
 
     this.sampleBulkService
-      .bulkUpdateStatus(ids, status)
+      .bulkMoveToTrash(ids)
       .pipe(
         finalize(() => {
           this.loading.set(false);
@@ -471,7 +479,7 @@ export class SampleListComponent implements OnInit {
         },
         error: () => {
           this.error.set(
-            "Une erreur est survenue lors de la mise à jour groupée.",
+            "Une erreur est survenue lors du déplacement dans la corbeille.",
           );
         },
       });

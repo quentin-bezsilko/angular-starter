@@ -20,10 +20,6 @@ const checkAuthentication = (url: string): boolean | UrlTree => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  console.log("[AUTH GUARD]", {
-    url,
-    authenticated: authService.isAuthenticated(),
-  });
   if (authService.isAuthenticated()) {
     return true;
   }

@@ -190,22 +190,25 @@ v1 : Terminée
 V2 :
 export CSV/Excel (ok)
 import en masse (ok)
-historique / audit (créer une table SampleHistory de l'historique des modifications, )
-@Entity
-class SampleHistory {
-Long id;
-Long sampleId;
-HistoryAction action;
-String changedBy;
-LocalDateTime changedAt;
-@Lob
-String details;
-}
-Sample > Détail > Historique > Commentaires
-sélection multiple et actions groupées (Export, duplication, suppression et activation des samples sélectionnés uniquement)
-archivage plutôt que suppression physique
-dashboard avec quelques statistiques
-favoris / samples récemment consultés
+sélection multiple et actions groupées - export, duplication, suppression et activation des samples sélectionnés uniquement (ok)
+archivage plutôt que suppression physique (ok)
+
+- historique / audit (créer une table SampleHistory de l'historique des modifications, )
+  @Entity
+  class SampleHistory {
+  Long id;
+  Long sampleId;
+  HistoryAction action;
+  String changedBy;
+  LocalDateTime changedAt;
+  @Lob
+  String details;
+  }
+  Sample > Détail > Historique > Commentaires
+- dashboard avec quelques statistiques
+- favoris / samples récemment consultés
+
+Puis Faire un README professionnel
 
 Objectif :
 ANGULAR STARTER (Créer le README adapté)

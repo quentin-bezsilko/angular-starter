@@ -5,9 +5,13 @@
       <p>Consultez et gérez les samples existants.</p>
     </div>
 
-    <a class="button button--primary" routerLink="/samples/new">
-      Nouveau sample
-    </a>
+    <div class="header-actions">
+      <a class="button" routerLink="/samples/trash"> 🗑️ Corbeille </a>
+
+      <a class="button button--primary" routerLink="/samples/new">
+        Nouveau sample
+      </a>
+    </div>
   </header>
 
   <div class="filters__actions">
@@ -54,9 +58,9 @@
       <button
         type="button"
         class="button button--danger"
-        (click)="bulkDelete()"
+        (click)="bulkMoveToTrash()"
       >
-        🗑️ Supprimer
+        🗑️ Mettre à la Corbeille
       </button>
     </div>
   }
@@ -400,9 +404,9 @@
                     type="button"
                     class="action-icon action-icon--danger"
                     [disabled]="loading()"
-                    (click)="delete(sample.id)"
-                    title="Supprimer le sample"
-                    aria-label="Supprimer le sample"
+                    (click)="moveToTrash(sample.id)"
+                    title="Déplacer le sample dans la corbeille"
+                    aria-label="Déplacer le sample dans la corbeille"
                   >
                     🗑️
                   </button>

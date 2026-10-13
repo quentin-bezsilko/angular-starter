@@ -7,15 +7,11 @@ import {
 } from "@angular/core";
 
 import { DatePipe, DecimalPipe } from "@angular/common";
-
 import { ActivatedRoute, RouterLink } from "@angular/router";
-
 import type { HttpErrorResponse } from "@angular/common/http";
 import { finalize } from "rxjs";
-
 import type { Sample } from "../../model/sample.model";
 import { SampleStatus } from "../../model/sample.model";
-
 import { SampleService } from "../../service/sample.service";
 
 @Component({
@@ -80,7 +76,7 @@ export class SampleDetailComponent implements OnInit {
         return "Archivé";
 
       case SampleStatus.DELETED:
-        return "Supprimé";
+        return "Dans la corbeille";
     }
   }
 

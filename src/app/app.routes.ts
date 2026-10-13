@@ -1,5 +1,4 @@
 import type { Routes } from "@angular/router";
-
 import { authChildGuard } from "./auth/auth.guard";
 
 export const routes: Routes = [
@@ -32,6 +31,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import("./samples/components/sample-edit/sample-edit.component").then(
             (m) => m.SampleEditComponent,
+          ),
+      },
+      {
+        path: "samples/trash",
+        loadComponent: () =>
+          import("./samples/pages/sample-trash/sample-trash.component").then(
+            (m) => m.SampleTrashComponent,
           ),
       },
       {
