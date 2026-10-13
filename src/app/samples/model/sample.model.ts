@@ -63,3 +63,14 @@ export interface UpdateSampleRequest {
   status: SampleStatus;
   version: number;
 }
+
+export interface ImportResult {
+  created: number;
+  failed: number;
+  errors: ImportError[];
+}
+
+export interface ImportError {
+  row: number;
+  message: string;
+}

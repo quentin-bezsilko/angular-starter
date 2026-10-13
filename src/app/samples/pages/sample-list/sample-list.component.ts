@@ -1,29 +1,11 @@
-import type {
-  OnInit} from '@angular/core';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal
-} from '@angular/core';
-
+import type { OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-
-import {
-  debounceTime,
-  distinctUntilChanged,
-  finalize,
-  Subject
-} from 'rxjs';
-
-import type {
-  Sample} from '../../model/sample.model';
-import {
-  SampleStatus
-} from '../../model/sample.model';
-
+import { debounceTime, distinctUntilChanged, finalize, Subject } from 'rxjs';
+import type { ImportResult, Sample } from '../../model/sample.model';
+import { SampleStatus } from '../../model/sample.model';
 import { SampleService } from '../../service/sample.service';
 import { AuthService } from '../../../auth/auth.service';
 
@@ -72,6 +54,9 @@ export class SampleListComponent implements OnInit {
   private readonly authService = inject(AuthService);
   readonly canRead = this.authService.canRead;
   readonly canWrite = this.authService.canWrite;
+
+  importResult?: ImportResult;
+  showImportResult = false;
 
   ngOnInit(): void {
     this.searchSubject
@@ -216,6 +201,27 @@ export class SampleListComponent implements OnInit {
         this.error.set(
           'Une erreur est survenue lors de l’export des samples.'
         );
+      }
+    });
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files?.length) {
+      return;
+    }
+
+    const file = input.files[0];
+
+    this.sampleService.importSamples(file).subscribe({
+      next: result => {
+        this.importResult = result;
+        this.showImportResult = true;
+        this.loadSamples();
+      },
+      error: err => {
+        console.error(err);
       }
     });
   }

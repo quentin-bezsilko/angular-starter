@@ -7,7 +7,8 @@ import type {
   Sample,
   SampleStatus,
   CreateSampleRequest,
-  UpdateSampleRequest
+  UpdateSampleRequest,
+  ImportResult
 } from '../model/sample.model';
 
 @Injectable({
@@ -111,6 +112,16 @@ export class SampleService {
         params,
         responseType: 'blob'
       }
+    );
+  }
+
+  importSamples(file: File): Observable<ImportResult> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post<ImportResult>(
+      `${this.apiUrl}/import`,
+      formData
     );
   }
 }

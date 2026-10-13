@@ -189,7 +189,7 @@ v1 : Terminée
 
 V2 :
 export CSV/Excel (ok)
-import en masse
+import en masse (ok)
 historique / audit
 sélection multiple et actions groupées
 archivage plutôt que suppression physique

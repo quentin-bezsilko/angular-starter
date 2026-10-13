@@ -14,30 +14,77 @@
   </header>
   
   <div class="filters__actions">
-    <button
-      type="button"
-      class="button button--primary"
-      (click)="applyFilters()">
-      Rechercher
-    </button>
+    <div class="toolbar">
 
-    <button
-      type="button"
-      class="button"
-      (click)="resetFilters()">
-      Réinitialiser
-    </button>
+      <input
+        #fileInput
+        type="file"
+        accept=".xlsx,.xls"
+        hidden
+        (change)="onFileSelected($event)">
 
-    @if (canRead()) {
       <button
         type="button"
         class="button"
-        [disabled]="loading()"
-        (click)="exportExcel()">
-        Export Excel
+        (click)="fileInput.click()">
+        Import Excel
       </button>
-    }
+
+      @if (canRead()) {
+        <button
+          type="button"
+          class="button"
+          (click)="exportExcel()">
+          📤 Export Excel
+        </button>
+      }
+
+    </div>
   </div>
+
+  @if (showImportResult && importResult; as result) {
+    <div
+      class="import-result"
+      [class.import-result--success]="result.failed === 0"
+      [class.import-result--warning]="result.failed > 0">
+
+      <div class="import-result__header">
+
+        <div class="import-result__title">
+          <span class="import-result__icon">
+            {{ result.failed === 0 ? '✅' : '⚠️' }}
+          </span>
+
+          <strong>
+            {{ result.created }} sample(s) créé(s)
+          </strong>
+        </div>
+
+        <button
+          type="button"
+          class="import-result__close"
+          (click)="showImportResult = false"
+          aria-label="Fermer">
+          ✕
+        </button>
+
+      </div>
+
+      @if (result.failed > 0) {
+        <p>
+          {{ result.failed }} erreur(s) détectée(s)
+        </p>
+
+        <ul>
+          @for (error of result.errors; track $index) {
+            <li>
+              Ligne {{ error.row }} : {{ error.message }}
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  }
 
   <div class="filters">
 
