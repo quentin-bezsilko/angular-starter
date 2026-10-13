@@ -1,19 +1,13 @@
 <section class="sample-detail">
-
   <nav class="sample-detail__navigation">
-    <a routerLink="/samples">
-      ← Retour aux samples
-    </a>
+    <a routerLink="/samples"> ← Retour aux samples </a>
   </nav>
 
   @if (loading()) {
-
     <div class="state">
       <p>Chargement du sample...</p>
     </div>
-
   } @else if (error()) {
-
     <div class="state state--error">
       <h1>Impossible d'afficher le sample</h1>
 
@@ -21,17 +15,10 @@
         {{ error() }}
       </p>
 
-      <a
-        class="button"
-        routerLink="/samples">
-        Retour à la liste
-      </a>
+      <a class="button" routerLink="/samples"> Retour à la liste </a>
     </div>
-
   } @else if (sample(); as sample) {
-
     <header class="sample-detail__header">
-
       <div>
         <div class="sample-detail__title">
           <h1>{{ sample.name }}</h1>
@@ -41,7 +28,8 @@
             [class.badge--created]="sample.status === SampleStatus.CREATED"
             [class.badge--active]="sample.status === SampleStatus.ACTIVE"
             [class.badge--archived]="sample.status === SampleStatus.ARCHIVED"
-            [class.badge--deleted]="sample.status === SampleStatus.DELETED">
+            [class.badge--deleted]="sample.status === SampleStatus.DELETED"
+          >
             {{ statusLabel(sample.status) }}
           </span>
         </div>
@@ -51,30 +39,23 @@
             {{ sample.description }}
           </p>
         }
-
       </div>
 
       <div class="sample-detail__actions">
-
         <a
           class="button button--primary"
-          [routerLink]="['/samples', sample.id, 'edit']">
+          [routerLink]="['/samples', sample.id, 'edit']"
+        >
           Modifier
         </a>
-
       </div>
-
     </header>
 
-
     <div class="detail-grid">
-
       <article class="card">
-
         <h2>Informations générales</h2>
 
         <dl class="properties">
-
           <div>
             <dt>Identifiant</dt>
             <dd>{{ sample.id }}</dd>
@@ -99,28 +80,19 @@
             <dt>Actif</dt>
             <dd>
               @if (sample.active) {
-                <span class="boolean boolean--true">
-                  Oui
-                </span>
+                <span class="boolean boolean--true"> Oui </span>
               } @else {
-                <span class="boolean boolean--false">
-                  Non
-                </span>
+                <span class="boolean boolean--false"> Non </span>
               }
             </dd>
           </div>
-
         </dl>
-
       </article>
 
-
       <article class="card">
-
         <h2>Stock et données physiques</h2>
 
         <dl class="properties">
-
           <div>
             <dt>Quantité</dt>
             <dd>{{ sample.quantity }}</dd>
@@ -128,14 +100,14 @@
 
           <div>
             <dt>Stock</dt>
-            <dd>{{ sample.stock ?? 'Non renseigné' }}</dd>
+            <dd>{{ sample.stock ?? "Non renseigné" }}</dd>
           </div>
 
           <div>
             <dt>Poids</dt>
             <dd>
               @if (sample.weight !== null) {
-                {{ sample.weight | number:'1.0-2' }}
+                {{ sample.weight | number: "1.0-2" }}
               } @else {
                 Non renseigné
               }
@@ -146,7 +118,7 @@
             <dt>Ratio</dt>
             <dd>
               @if (sample.ratio !== null) {
-                {{ sample.ratio | number:'1.0-3' }}
+                {{ sample.ratio | number: "1.0-3" }}
               } @else {
                 Non renseigné
               }
@@ -155,28 +127,21 @@
 
           <div>
             <dt>Prix</dt>
-            <dd>
-              {{ sample.price | number:'1.2-2' }} €
-            </dd>
+            <dd>{{ sample.price | number: "1.2-2" }} €</dd>
           </div>
-
         </dl>
-
       </article>
 
-
       <article class="card">
-
         <h2>Fabrication</h2>
 
         <dl class="properties">
-
           <div>
             <dt>Date de fabrication</dt>
 
             <dd>
               @if (sample.manufacturedDate) {
-                {{ sample.manufacturedDate | date:'dd/MM/yyyy' }}
+                {{ sample.manufacturedDate | date: "dd/MM/yyyy" }}
               } @else {
                 Non renseignée
               }
@@ -187,7 +152,7 @@
             <dt>Heure de fabrication</dt>
 
             <dd>
-              {{ sample.manufacturedTime ?? 'Non renseignée' }}
+              {{ sample.manufacturedTime ?? "Non renseignée" }}
             </dd>
           </div>
 
@@ -196,7 +161,7 @@
 
             <dd>
               @if (sample.createdAt) {
-                {{ sample.createdAt | date:'dd/MM/yyyy HH:mm' }}
+                {{ sample.createdAt | date: "dd/MM/yyyy HH:mm" }}
               } @else {
                 Non renseignée
               }
@@ -208,24 +173,19 @@
 
             <dd>
               @if (sample.updatedAt) {
-                {{ sample.updatedAt | date:'dd/MM/yyyy HH:mm:ss' }}
+                {{ sample.updatedAt | date: "dd/MM/yyyy HH:mm:ss" }}
               } @else {
                 Non renseignée
               }
             </dd>
           </div>
-
         </dl>
-
       </article>
 
-
       <article class="card">
-
         <h2>Informations techniques</h2>
 
         <dl class="properties">
-
           <div>
             <dt>External ID</dt>
             <dd class="technical-value">
@@ -236,7 +196,7 @@
           <div>
             <dt>Version</dt>
             <dd>
-              {{ sample.version ?? 'Non renseignée' }}
+              {{ sample.version ?? "Non renseignée" }}
             </dd>
           </div>
 
@@ -250,16 +210,11 @@
               }
             </dd>
           </div>
-
         </dl>
-
       </article>
-
     </div>
 
-
     <article class="card comments-card">
-
       <h2>Commentaires</h2>
 
       @if (sample.comments) {
@@ -267,13 +222,8 @@
           {{ sample.comments }}
         </p>
       } @else {
-        <p class="empty-value">
-          Aucun commentaire.
-        </p>
+        <p class="empty-value">Aucun commentaire.</p>
       }
-
     </article>
-
   }
-
 </section>

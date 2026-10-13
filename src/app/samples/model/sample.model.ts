@@ -1,8 +1,8 @@
 export enum SampleStatus {
-  CREATED = 'CREATED',
-  ACTIVE = 'ACTIVE',
-  ARCHIVED = 'ARCHIVED',
-  DELETED = 'DELETED'
+  CREATED = "CREATED",
+  ACTIVE = "ACTIVE",
+  ARCHIVED = "ARCHIVED",
+  DELETED = "DELETED",
 }
 
 export interface Sample {

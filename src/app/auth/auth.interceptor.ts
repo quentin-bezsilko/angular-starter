@@ -1,33 +1,28 @@
-import { inject } from '@angular/core';
+import { inject } from "@angular/core";
 import type {
   HttpErrorResponse,
   HttpEvent,
   HttpInterceptorFn,
-  HttpRequest
-} from '@angular/common/http';
-import { Router } from '@angular/router';
+  HttpRequest,
+} from "@angular/common/http";
+import { Router } from "@angular/router";
 
-import type {
-  Observable} from 'rxjs';
-import {
-  catchError,
-  switchMap,
-  throwError
-} from 'rxjs';
+import type { Observable } from "rxjs";
+import { catchError, switchMap, throwError } from "rxjs";
 
-import { AuthService } from './auth.service';
+import { AuthService } from "./auth.service";
 
 /**
  * Ajoute l'access token à une requête HTTP.
  */
 const addAccessToken = (
   request: HttpRequest<unknown>,
-  accessToken: string
+  accessToken: string,
 ): HttpRequest<unknown> => {
   return request.clone({
     setHeaders: {
-      Authorization: `Bearer ${accessToken}`
-    }
+      Authorization: `Bearer ${accessToken}`,
+    },
   });
 };
 
@@ -39,13 +34,11 @@ const addAccessToken = (
  * - ni déclencher le mécanisme automatique de refresh ;
  * - ni déclencher les redirections globales 401/403.
  */
-const isAuthenticationRequest = (
-  request: HttpRequest<unknown>
-): boolean => {
+const isAuthenticationRequest = (request: HttpRequest<unknown>): boolean => {
   return (
-    request.url.endsWith('/login') ||
-    request.url.endsWith('/refresh') ||
-    request.url.endsWith('/logout')
+    request.url.endsWith("/login") ||
+    request.url.endsWith("/refresh") ||
+    request.url.endsWith("/logout")
   );
 };
 
@@ -60,7 +53,7 @@ const isAuthenticationRequest = (
  */
 export const authInterceptor: HttpInterceptorFn = (
   request,
-  next
+  next,
 ): Observable<HttpEvent<unknown>> => {
   const authService = inject(AuthService);
   const router = inject(Router);
@@ -81,7 +74,6 @@ export const authInterceptor: HttpInterceptorFn = (
 
   return next(authenticatedRequest).pipe(
     catchError((error: HttpErrorResponse) => {
-
       /*
        * Les endpoints d'authentification sont gérés
        * directement par AuthService.
@@ -109,12 +101,12 @@ export const authInterceptor: HttpInterceptorFn = (
        */
       if (error.status === 403) {
         if (authService.isAuthenticated()) {
-          void router.navigate(['/403']);
+          void router.navigate(["/403"]);
         } else {
-          void router.navigate(['/login'], {
+          void router.navigate(["/login"], {
             queryParams: {
-              returnUrl: router.url
-            }
+              returnUrl: router.url,
+            },
           });
         }
 
@@ -137,11 +129,8 @@ export const authInterceptor: HttpInterceptorFn = (
        * au refresh token HttpOnly.
        */
       return authService.refresh().pipe(
-        switchMap(response => {
-          const retryRequest = addAccessToken(
-            request,
-            response.accessToken
-          );
+        switchMap((response) => {
+          const retryRequest = addAccessToken(request, response.accessToken);
 
           return next(retryRequest);
         }),
@@ -155,17 +144,17 @@ export const authInterceptor: HttpInterceptorFn = (
          * l'URL demandée.
          */
         catchError((refreshError: unknown) => {
-  authService.clearAccessToken();
+          authService.clearAccessToken();
 
-  void router.navigate(['/login'], {
-    queryParams: {
-      returnUrl: router.url
-    }
-  });
+          void router.navigate(["/login"], {
+            queryParams: {
+              returnUrl: router.url,
+            },
+          });
 
-  return throwError(() => refreshError);
-})
+          return throwError(() => refreshError);
+        }),
       );
-    })
+    }),
   );
 };

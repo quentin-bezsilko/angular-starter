@@ -1,28 +1,18 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 
-import {
-  Router,
-  RouterLink
-} from '@angular/router';
+import { Router, RouterLink } from "@angular/router";
 
-import { AuthService } from '../../auth/auth.service';
+import { AuthService } from "../../auth/auth.service";
 
 @Component({
-  selector: 'app-header',
+  selector: "app-header",
   standalone: true,
-  imports: [
-    RouterLink
-  ],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  imports: [RouterLink],
+  templateUrl: "./header.component.html",
+  styleUrl: "./header.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-
   readonly authService = inject(AuthService);
 
   private readonly router = inject(Router);
@@ -34,11 +24,11 @@ export class HeaderComponent {
       },
       error: () => {
         this.redirectToLogin();
-      }
+      },
     });
   }
 
   private redirectToLogin(): void {
-    void this.router.navigate(['/login']);
+    void this.router.navigate(["/login"]);
   }
 }

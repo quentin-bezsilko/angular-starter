@@ -148,39 +148,39 @@ ProjectStore
 14
 └── computed(...)
 
-
 SCENARIOS A VALIDER :
 ✅ Login
-   accessToken → Signal
-   refreshToken → HttpOnly
+accessToken → Signal
+refreshToken → HttpOnly
 
 ✅ Requête API
-   Authorization: Bearer accessToken
+Authorization: Bearer accessToken
 
 ✅ F5
-   accessToken perdu
-   refresh automatique
-   accessToken restauré
-   refreshToken rotaté
+accessToken perdu
+refresh automatique
+accessToken restauré
+refreshToken rotaté
 
 ✅ Access token expiré
-   API → 401
-   refresh → 200
-   requête rejouée → 200
+API → 401
+refresh → 200
+requête rejouée → 200
 
 ✅ Plusieurs 401
-   un seul /refresh
+un seul /refresh
 
 ✅ Logout
-   accessToken supprimé
-   refreshToken révoqué/supprimé
+accessToken supprimé
+refreshToken révoqué/supprimé
 
 ✅ F5 après logout
-   session non restaurée
+session non restaurée
 
 PUIS CREER LES ECRANS
 
 v1 : Terminée
+
 - Liste des samples
 - Recherche avec filtres
 - Consultation détail
@@ -190,32 +190,43 @@ v1 : Terminée
 V2 :
 export CSV/Excel (ok)
 import en masse (ok)
-historique / audit
-sélection multiple et actions groupées
+historique / audit (créer une table SampleHistory de l'historique des modifications, )
+@Entity
+class SampleHistory {
+Long id;
+Long sampleId;
+HistoryAction action;
+String changedBy;
+LocalDateTime changedAt;
+@Lob
+String details;
+}
+Sample > Détail > Historique > Commentaires
+sélection multiple et actions groupées (Export, duplication, suppression et activation des samples sélectionnés uniquement)
 archivage plutôt que suppression physique
 dashboard avec quelques statistiques
 favoris / samples récemment consultés
 
 Objectif :
-                 ANGULAR STARTER (Créer le README adapté)
+ANGULAR STARTER (Créer le README adapté)
 
- Authentication                  Architecture
- ├── JWT                         ├── Lazy loading
- ├── HttpOnly refresh            ├── Feature architecture
- ├── Rotation                    ├── Signals
- ├── Interceptor                 └── Typed models
- └── Guards
+Authentication Architecture
+├── JWT ├── Lazy loading
+├── HttpOnly refresh ├── Feature architecture
+├── Rotation ├── Signals
+├── Interceptor └── Typed models
+└── Guards
 
- Data                            UX
- ├── HttpClient                  ├── Loading
- ├── CRUD                        ├── Empty state
- ├── Filtering                   ├── Errors
- ├── Pagination                  ├── Toasts
- └── Cache                       └── Responsive
+Data UX
+├── HttpClient ├── Loading
+├── CRUD ├── Empty state
+├── Filtering ├── Errors
+├── Pagination ├── Toasts
+└── Cache └── Responsive
 
- Forms                           Quality
- ├── Typed reactive forms       ├── Unit tests
- ├── Validation                 ├── Component tests
- ├── Async validation           ├── HTTP tests
- └── Unsaved changes            ├── E2E
-                                └── lint / CI
+Forms Quality
+├── Typed reactive forms ├── Unit tests
+├── Validation ├── Component tests
+├── Async validation ├── HTTP tests
+└── Unsaved changes ├── E2E
+└── lint / CI

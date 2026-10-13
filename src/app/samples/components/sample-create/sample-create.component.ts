@@ -2,35 +2,28 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  signal
-} from '@angular/core';
+  signal,
+} from "@angular/core";
 
-import {
-  Router,
-  RouterLink
-} from '@angular/router';
+import { Router, RouterLink } from "@angular/router";
 
-import { finalize } from 'rxjs';
+import { finalize } from "rxjs";
 
-import { SampleFormComponent } from '../../components/sample-form/sample-form.component';
-import type { SampleFormValue } from '../../components/sample-form/sample-form.component';
+import { SampleFormComponent } from "../../components/sample-form/sample-form.component";
+import type { SampleFormValue } from "../../components/sample-form/sample-form.component";
 
-import { SampleService } from '../../service/sample.service';
-import type { CreateSampleRequest } from '../../model/sample.model';
+import { SampleService } from "../../service/sample.service";
+import type { CreateSampleRequest } from "../../model/sample.model";
 
 @Component({
-  selector: 'app-sample-create',
+  selector: "app-sample-create",
   standalone: true,
-  imports: [
-    RouterLink,
-    SampleFormComponent
-  ],
-  templateUrl: './sample-create.component.html',
-  styleUrl: './sample-create.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  imports: [RouterLink, SampleFormComponent],
+  templateUrl: "./sample-create.component.html",
+  styleUrl: "./sample-create.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SampleCreateComponent {
-
   private readonly sampleService = inject(SampleService);
   private readonly router = inject(Router);
 
@@ -38,48 +31,44 @@ export class SampleCreateComponent {
   readonly error = signal<string | null>(null);
 
   createSample(value: SampleFormValue): void {
-  this.submitting.set(true);
-  this.error.set(null);
+    this.submitting.set(true);
+    this.error.set(null);
 
-  const request: CreateSampleRequest = {
-  name: value.name,
-  description: value.description,
-  quantity: value.quantity!,
-  stock: value.stock,
-  weight: value.weight,
-  ratio: value.ratio,
-  price: value.price!,
-  active: value.active,
-  category: value.category,
-  manufacturedDate: value.manufacturedDate,
-  manufacturedTime: value.manufacturedTime,
-  externalId: crypto.randomUUID(),
-  document: value.document,
-  comments: value.comments,
-  status: value.status
-};
+    const request: CreateSampleRequest = {
+      name: value.name,
+      description: value.description,
+      quantity: value.quantity!,
+      stock: value.stock,
+      weight: value.weight,
+      ratio: value.ratio,
+      price: value.price!,
+      active: value.active,
+      category: value.category,
+      manufacturedDate: value.manufacturedDate,
+      manufacturedTime: value.manufacturedTime,
+      externalId: crypto.randomUUID(),
+      document: value.document,
+      comments: value.comments,
+      status: value.status,
+    };
 
-  this.sampleService
-    .create(request)
-    .pipe(
-      finalize(() => {
-        this.submitting.set(false);
-      })
-    )
-    .subscribe({
-      next: sample => {
-        void this.router.navigate([
-          '/samples',
-          sample.id
-        ]);
-      },
+    this.sampleService
+      .create(request)
+      .pipe(
+        finalize(() => {
+          this.submitting.set(false);
+        }),
+      )
+      .subscribe({
+        next: (sample) => {
+          void this.router.navigate(["/samples", sample.id]);
+        },
 
-      error: () => {
-        this.error.set(
-          'Une erreur est survenue lors de la création du sample.'
-        );
-      }
-    });
+        error: () => {
+          this.error.set(
+            "Une erreur est survenue lors de la création du sample.",
+          );
+        },
+      });
   }
-
 }

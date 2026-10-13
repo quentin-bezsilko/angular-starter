@@ -7,12 +7,7 @@ const angular = require("angular-eslint");
 
 module.exports = defineConfig([
   {
-    ignores: [
-      "dist/**",
-      "coverage/**",
-      "node_modules/**",
-      ".angular/**",
-    ],
+    ignores: ["dist/**", "coverage/**", "node_modules/**", ".angular/**"],
   },
 
   {
@@ -65,9 +60,7 @@ module.exports = defineConfig([
   },
 
   {
-    files: [
-      "src/**/*.component.ts",
-    ],
+    files: ["src/**/*.component.ts"],
 
     rules: {
       "@typescript-eslint/unbound-method": "off",

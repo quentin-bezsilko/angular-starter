@@ -1,35 +1,23 @@
-import type {
-  OnInit} from '@angular/core';
+import type { OnInit } from "@angular/core";
 import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  signal
-} from '@angular/core';
+  signal,
+} from "@angular/core";
 
-import type { HttpErrorResponse } from '@angular/common/http';
+import type { HttpErrorResponse } from "@angular/common/http";
 
-import {
-  ActivatedRoute,
-  Router,
-  RouterLink
-} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 
-import { finalize } from 'rxjs';
+import { finalize } from "rxjs";
 
-import type {
-  Sample,
-  UpdateSampleRequest
-} from '../../model/sample.model';
+import type { Sample, UpdateSampleRequest } from "../../model/sample.model";
 
-import type {
-  SampleFormValue
-} from '../../components/sample-form/sample-form.component';
-import {
-  SampleFormComponent
-} from '../../components/sample-form/sample-form.component';
+import type { SampleFormValue } from "../../components/sample-form/sample-form.component";
+import { SampleFormComponent } from "../../components/sample-form/sample-form.component";
 
-import { SampleService } from '../../service/sample.service';
+import { SampleService } from "../../service/sample.service";
 
 interface VersionConflictError {
   title?: string;
@@ -41,18 +29,14 @@ interface VersionConflictError {
 }
 
 @Component({
-  selector: 'app-sample-edit',
+  selector: "app-sample-edit",
   standalone: true,
-  imports: [
-    RouterLink,
-    SampleFormComponent
-  ],
-  templateUrl: './sample-edit.component.html',
-  styleUrl: './sample-edit.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  imports: [RouterLink, SampleFormComponent],
+  templateUrl: "./sample-edit.component.html",
+  styleUrl: "./sample-edit.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SampleEditComponent implements OnInit {
-
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly sampleService = inject(SampleService);
@@ -66,18 +50,13 @@ export class SampleEditComponent implements OnInit {
 
   readonly versionConflict = signal(false);
 
-  readonly versionConflictMessage =
-    signal<string | null>(null);
+  readonly versionConflictMessage = signal<string | null>(null);
 
   ngOnInit(): void {
-    const id = Number(
-      this.route.snapshot.paramMap.get('id')
-    );
+    const id = Number(this.route.snapshot.paramMap.get("id"));
 
     if (!Number.isInteger(id) || id <= 0) {
-      this.error.set(
-        'Identifiant du sample invalide.'
-      );
+      this.error.set("Identifiant du sample invalide.");
       return;
     }
 
@@ -92,9 +71,7 @@ export class SampleEditComponent implements OnInit {
     }
 
     if (sample.version === null) {
-      this.error.set(
-        'Impossible de modifier ce sample : version manquante.'
-      );
+      this.error.set("Impossible de modifier ce sample : version manquante.");
       return;
     }
 
@@ -121,7 +98,7 @@ export class SampleEditComponent implements OnInit {
       status: value.status,
 
       // Version du Sample qui a été chargé.
-      version: sample.version
+      version: sample.version,
     };
 
     this.sampleService
@@ -129,25 +106,22 @@ export class SampleEditComponent implements OnInit {
       .pipe(
         finalize(() => {
           this.submitting.set(false);
-        })
+        }),
       )
       .subscribe({
-        next: updatedSample => {
+        next: (updatedSample) => {
           /*
            * Le backend renvoie désormais la nouvelle
            * version Hibernate.
            */
           this.sample.set(updatedSample);
 
-          void this.router.navigate([
-            '/samples',
-            updatedSample.id
-          ]);
+          void this.router.navigate(["/samples", updatedSample.id]);
         },
 
         error: (error: HttpErrorResponse) => {
           this.handleUpdateError(error);
-        }
+        },
       });
   }
 
@@ -170,10 +144,10 @@ export class SampleEditComponent implements OnInit {
       .pipe(
         finalize(() => {
           this.loading.set(false);
-        })
+        }),
       )
       .subscribe({
-        next: sample => {
+        next: (sample) => {
           /*
            * SampleFormComponent observe initialValue
            * et repatche lui-même son formulaire.
@@ -185,34 +159,22 @@ export class SampleEditComponent implements OnInit {
 
         error: (error: HttpErrorResponse) => {
           this.handleLoadError(error);
-        }
+        },
       });
   }
 
-  private handleLoadError(
-    error: HttpErrorResponse
-  ): void {
-
+  private handleLoadError(error: HttpErrorResponse): void {
     if (error.status === 404) {
-      this.error.set(
-        'Le sample demandé est introuvable.'
-      );
+      this.error.set("Le sample demandé est introuvable.");
       return;
     }
 
-    this.error.set(
-      'Une erreur est survenue lors du chargement du sample.'
-    );
+    this.error.set("Une erreur est survenue lors du chargement du sample.");
   }
 
-  private handleUpdateError(
-    error: HttpErrorResponse
-  ): void {
-
+  private handleUpdateError(error: HttpErrorResponse): void {
     if (error.status === 404) {
-      this.error.set(
-        'Le sample demandé est introuvable.'
-      );
+      this.error.set("Le sample demandé est introuvable.");
       return;
     }
 
@@ -223,27 +185,24 @@ export class SampleEditComponent implements OnInit {
 
     if (error.status === 400) {
       this.error.set(
-        'Certaines données sont invalides. Vérifiez le formulaire.'
+        "Certaines données sont invalides. Vérifiez le formulaire.",
       );
       return;
     }
 
     this.error.set(
-      'Une erreur est survenue lors de la modification du sample.'
+      "Une erreur est survenue lors de la modification du sample.",
     );
   }
 
-  private handleVersionConflict(
-    error: HttpErrorResponse
-  ): void {
-    const conflict =
-      error.error as VersionConflictError | null;
+  private handleVersionConflict(error: HttpErrorResponse): void {
+    const conflict = error.error as VersionConflictError | null;
 
     this.versionConflict.set(true);
 
     this.versionConflictMessage.set(
       conflict?.detail ??
-      'Ce sample a été modifié par un autre utilisateur depuis son chargement.'
+        "Ce sample a été modifié par un autre utilisateur depuis son chargement.",
     );
   }
 

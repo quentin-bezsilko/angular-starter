@@ -1,16 +1,15 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import type { Observable } from 'rxjs';
-import { catchError, finalize, of, shareReplay, tap } from 'rxjs';
-import type { JwtPayload, LoginRequest, TokenResponse } from './auth.model';
+import { computed, inject, Injectable, signal } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import type { Observable } from "rxjs";
+import { catchError, finalize, of, shareReplay, tap } from "rxjs";
+import type { JwtPayload, LoginRequest, TokenResponse } from "./auth.model";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AuthService {
-
   private readonly http = inject(HttpClient);
-  private readonly authUrl = 'http://localhost:8081/authstarter/auth';
+  private readonly authUrl = "http://localhost:8081/authstarter/auth";
   private readonly accessTokenSignal = signal<string | null>(null);
   readonly accessToken = this.accessTokenSignal.asReadonly();
   private refreshInProgress$: Observable<TokenResponse> | null = null;
@@ -19,17 +18,13 @@ export class AuthService {
 
   login(request: LoginRequest): Observable<TokenResponse> {
     return this.http
-      .post<TokenResponse>(
-        `${this.authUrl}/login`,
-        request,
-        {
-          withCredentials: true
-        }
-      )
+      .post<TokenResponse>(`${this.authUrl}/login`, request, {
+        withCredentials: true,
+      })
       .pipe(
-        tap(response => {
+        tap((response) => {
           this.accessTokenSignal.set(response.accessToken);
-        })
+        }),
       );
   }
 
@@ -43,11 +38,11 @@ export class AuthService {
         `${this.authUrl}/refresh`,
         {},
         {
-          withCredentials: true
-        }
+          withCredentials: true,
+        },
       )
       .pipe(
-        tap(response => {
+        tap((response) => {
           this.accessTokenSignal.set(response.accessToken);
         }),
         finalize(() => {
@@ -55,8 +50,8 @@ export class AuthService {
         }),
         shareReplay({
           bufferSize: 1,
-          refCount: false
-        })
+          refCount: false,
+        }),
       );
 
     return this.refreshInProgress$;
@@ -67,28 +62,28 @@ export class AuthService {
       catchError(() => {
         this.accessTokenSignal.set(null);
         return of(null);
-      })
+      }),
     );
   }
 
   logout(): Observable<void> {
-      return this.http
-        .post<void>(
-          `${this.authUrl}/logout`,
-          {},
-          {
-            withCredentials: true
-          }
-        )
-        .pipe(
-          finalize(() => {
-            this.accessTokenSignal.set(null);
-          })
-        );
+    return this.http
+      .post<void>(
+        `${this.authUrl}/logout`,
+        {},
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        finalize(() => {
+          this.accessTokenSignal.set(null);
+        }),
+      );
   }
 
   private parseJwt(token: string): JwtPayload {
-    const payload = token.split('.')[1];
+    const payload = token.split(".")[1];
     return JSON.parse(atob(payload)) as JwtPayload;
   }
 
@@ -106,13 +101,9 @@ export class AuthService {
     }
   });
 
-  readonly canRead = computed(() =>
-    this.authorities().includes('READ')
-  );
+  readonly canRead = computed(() => this.authorities().includes("READ"));
 
-  readonly canWrite = computed(() =>
-    this.authorities().includes('WRITE')
-  );
+  readonly canWrite = computed(() => this.authorities().includes("WRITE"));
 
   clearAccessToken(): void {
     this.accessTokenSignal.set(null);

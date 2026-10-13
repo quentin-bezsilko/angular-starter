@@ -1,14 +1,12 @@
-import { inject } from '@angular/core';
+import { inject } from "@angular/core";
 import type {
   CanActivateChildFn,
   CanActivateFn,
-  UrlTree
-} from '@angular/router';
-import {
-  Router
-} from '@angular/router';
+  UrlTree,
+} from "@angular/router";
+import { Router } from "@angular/router";
 
-import { AuthService } from './auth.service';
+import { AuthService } from "./auth.service";
 
 /**
  * Vérifie si l'utilisateur est authentifié.
@@ -22,17 +20,17 @@ const checkAuthentication = (url: string): boolean | UrlTree => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  console.log('[AUTH GUARD]', {
+  console.log("[AUTH GUARD]", {
     url,
-    authenticated: authService.isAuthenticated()
+    authenticated: authService.isAuthenticated(),
   });
   if (authService.isAuthenticated()) {
     return true;
   }
-  return router.createUrlTree(['/login'], {
+  return router.createUrlTree(["/login"], {
     queryParams: {
-      returnUrl: url
-    }
+      returnUrl: url,
+    },
   });
 };
 

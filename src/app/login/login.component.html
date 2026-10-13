@@ -1,52 +1,41 @@
 <div class="login-container">
-
   <div class="login-card">
-
     <h1>Connexion</h1>
 
-    <form
-      [formGroup]="loginForm"
-      (ngSubmit)="login()">
-
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
       <div class="form-field">
-        <label for="username">
-          Login
-        </label>
+        <label for="username"> Login </label>
 
         <input
           id="username"
           type="text"
           formControlName="username"
-          autocomplete="username">
+          autocomplete="username"
+        />
 
         @if (
           loginForm.controls.username.touched &&
           loginForm.controls.username.invalid
         ) {
-          <span class="error">
-            Le login est obligatoire.
-          </span>
+          <span class="error"> Le login est obligatoire. </span>
         }
       </div>
 
       <div class="form-field">
-        <label for="password">
-          Mot de passe
-        </label>
+        <label for="password"> Mot de passe </label>
 
         <input
           id="password"
           type="password"
           formControlName="password"
-          autocomplete="current-password">
+          autocomplete="current-password"
+        />
 
         @if (
           loginForm.controls.password.touched &&
           loginForm.controls.password.invalid
         ) {
-          <span class="error">
-            Le mot de passe est obligatoire.
-          </span>
+          <span class="error"> Le mot de passe est obligatoire. </span>
         }
       </div>
 
@@ -56,20 +45,13 @@
         </div>
       }
 
-      <button
-        type="submit"
-        [disabled]="loading()">
-
+      <button type="submit" [disabled]="loading()">
         @if (loading()) {
           Connexion...
         } @else {
           Se connecter
         }
-
       </button>
-
     </form>
-
   </div>
-
 </div>

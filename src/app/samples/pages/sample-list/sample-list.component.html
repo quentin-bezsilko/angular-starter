@@ -1,85 +1,97 @@
 <section class="sample-list">
-
   <header class="sample-list__header">
     <div>
       <h1>Samples</h1>
       <p>Consultez et gérez les samples existants.</p>
     </div>
 
-    <a
-      class="button button--primary"
-      routerLink="/samples/new">
+    <a class="button button--primary" routerLink="/samples/new">
       Nouveau sample
     </a>
   </header>
-  
+
   <div class="filters__actions">
     <div class="toolbar">
-
       <input
         #fileInput
         type="file"
         accept=".xlsx,.xls"
         hidden
-        (change)="onFileSelected($event)">
+        (change)="onFileSelected($event)"
+      />
 
-      <button
-        type="button"
-        class="button"
-        (click)="fileInput.click()">
+      <button type="button" class="button" (click)="fileInput.click()">
         Import Excel
       </button>
 
       @if (canRead()) {
-        <button
-          type="button"
-          class="button"
-          (click)="exportExcel()">
+        <button type="button" class="button" (click)="exportExcel()">
           📤 Export Excel
         </button>
       }
-
     </div>
   </div>
+
+  @if (hasSelection()) {
+    <div class="bulk-actions">
+      <span> {{ selectedCount() }} sample(s) sélectionné(s) </span>
+      <button type="button" class="button" (click)="bulkExport()">
+        📤 Export
+      </button>
+
+      <button type="button" class="button" (click)="bulkDuplicate()">
+        📋 Dupliquer
+      </button>
+
+      <button
+        type="button"
+        class="button"
+        (click)="bulkUpdateStatus(SampleStatus.ACTIVE)"
+      >
+        🔄 Activer
+      </button>
+
+      <button
+        type="button"
+        class="button button--danger"
+        (click)="bulkDelete()"
+      >
+        🗑️ Supprimer
+      </button>
+    </div>
+  }
 
   @if (showImportResult && importResult; as result) {
     <div
       class="import-result"
       [class.import-result--success]="result.failed === 0"
-      [class.import-result--warning]="result.failed > 0">
-
+      [class.import-result--warning]="result.failed > 0"
+    >
       <div class="import-result__header">
-
         <div class="import-result__title">
           <span class="import-result__icon">
-            {{ result.failed === 0 ? '✅' : '⚠️' }}
+            {{ result.failed === 0 ? "✅" : "⚠️" }}
           </span>
 
-          <strong>
-            {{ result.created }} sample(s) créé(s)
-          </strong>
+          <strong> {{ result.created }} sample(s) créé(s) </strong>
         </div>
 
         <button
           type="button"
           class="import-result__close"
           (click)="showImportResult = false"
-          aria-label="Fermer">
+          aria-label="Fermer"
+        >
           ✕
         </button>
-
       </div>
 
       @if (result.failed > 0) {
-        <p>
-          {{ result.failed }} erreur(s) détectée(s)
-        </p>
+        <p>{{ result.failed }} erreur(s) détectée(s)</p>
 
         <ul>
           @for (error of result.errors; track $index) {
-            <li>
-              Ligne {{ error.row }} : {{ error.message }}
-            </li>
+            <li>Ligne {{ error.row }} : {{ error.message }}</li>
           }
         </ul>
       }
@@ -87,233 +99,218 @@
   }
 
   <div class="filters">
+    <div class="filters__search">
+      <label for="sample-search"> Rechercher </label>
 
-  <div class="filters__search">
-    <label for="sample-search">
-      Rechercher
-    </label>
+      <input
+        id="sample-search"
+        type="search"
+        placeholder="Nom, description, commentaire..."
+        [ngModel]="search()"
+        (ngModelChange)="onSearchChange($event)"
+      />
+    </div>
 
-    <input
-    id="sample-search"
-    type="search"
-    placeholder="Nom, description, commentaire..."
-    [ngModel]="search()"
-    (ngModelChange)="onSearchChange($event)">
-  </div>
+    <div class="filters__field">
+      <label for="status-filter"> Statut </label>
 
-  <div class="filters__field">
-    <label for="status-filter">
-      Statut
-    </label>
+      <select
+        id="status-filter"
+        [ngModel]="statusFilter()"
+        (ngModelChange)="statusFilter.set($event); applyFilters()"
+      >
+        <option value="">Tous</option>
 
-    <select
-      id="status-filter"
-      [ngModel]="statusFilter()"
-      (ngModelChange)="statusFilter.set($event); applyFilters()">
+        @for (status of statuses; track status) {
+          <option [value]="status">
+            {{ statusLabel(status) }}
+          </option>
+        }
+      </select>
+    </div>
 
-      <option value="">
-        Tous
-      </option>
+    <div class="filters__field">
+      <label for="category-filter"> Catégorie </label>
 
-      @for (status of statuses; track status) {
-        <option [value]="status">
-          {{ statusLabel(status) }}
-        </option>
-      }
+      <input
+        id="category-filter"
+        type="text"
+        maxlength="1"
+        placeholder="A"
+        [ngModel]="categoryFilter()"
+        (ngModelChange)="categoryFilter.set($event)"
+        (keyup.enter)="applyFilters()"
+      />
+    </div>
 
-    </select>
-  </div>
+    <div class="filters__field">
+      <label for="active-filter"> Actif </label>
 
-  <div class="filters__field">
-    <label for="category-filter">
-      Catégorie
-    </label>
+      <select
+        id="active-filter"
+        [ngModel]="activeFilter()"
+        (ngModelChange)="
+          activeFilter.set($event === '' ? undefined : $event === 'true');
+          applyFilters()
+        "
+      >
+        <option value="">Tous</option>
 
-    <input
-      id="category-filter"
-      type="text"
-      maxlength="1"
-      placeholder="A"
-      [ngModel]="categoryFilter()"
-      (ngModelChange)="categoryFilter.set($event)"
-      (keyup.enter)="applyFilters()">
-  </div>
+        <option value="true">Oui</option>
 
-  <div class="filters__field">
-    <label for="active-filter">
-      Actif
-    </label>
+        <option value="false">Non</option>
+      </select>
+    </div>
 
-    <select
-      id="active-filter"
-      [ngModel]="activeFilter()"
-      (ngModelChange)="activeFilter.set(
-        $event === '' ? undefined : $event === 'true'
-      ); applyFilters()">
-
-      <option value="">
-        Tous
-      </option>
-
-      <option value="true">
-        Oui
-      </option>
-
-      <option value="false">
-        Non
-      </option>
-
-    </select>
-  </div>
-
-  <div class="filters__actions">
+    <div class="filters__actions">
       <button
         type="button"
         class="button button--primary"
-        (click)="applyFilters()">
+        (click)="applyFilters()"
+      >
         Rechercher
       </button>
-      <button
-        type="button"
-        class="button"
-        (click)="resetFilters()">
+      <button type="button" class="button" (click)="resetFilters()">
         Réinitialiser
       </button>
     </div>
   </div>
 
   @if (loading()) {
-
     <div class="state">
       <p>Chargement des samples...</p>
     </div>
-
   } @else if (error()) {
-
     <div class="state state--error">
       <p>{{ error() }}</p>
 
-      <button
-        type="button"
-        class="button"
-        (click)="loadSamples()">
+      <button type="button" class="button" (click)="loadSamples()">
         Réessayer
       </button>
     </div>
-
   } @else if (samples().length === 0) {
-
     <div class="state">
       <h2>Aucun sample</h2>
 
-      <p>
-        Aucun sample n'est disponible pour le moment.
-      </p>
+      <p>Aucun sample n'est disponible pour le moment.</p>
 
-      <a
-        class="button button--primary"
-        routerLink="/samples/new">
+      <a class="button button--primary" routerLink="/samples/new">
         Créer le premier sample
       </a>
     </div>
-
   } @else {
-
     <div class="table-container">
-
       <table>
         <thead>
           <tr>
             <th>
-  <button
-    type="button"
-    class="sort-button"
-    (click)="sortBy('name')">
-    Nom
-    <span>{{ sortSymbol('name') }}</span>
-  </button>
-</th>
+              <input
+                type="checkbox"
+                [checked]="areAllSelected()"
+                (change)="toggleAll($any($event.target).checked)"
+              />
+            </th>
             <th>
-  <button
-    type="button"
-    class="sort-button"
-    (click)="sortBy('status')">
-    Statut
-    <span>{{ sortSymbol('status') }}</span>
-  </button>
-</th>
+              <button
+                type="button"
+                class="sort-button"
+                (click)="sortBy('name')"
+              >
+                Nom
+                <span>{{ sortSymbol("name") }}</span>
+              </button>
+            </th>
             <th>
-  <button
-    type="button"
-    class="sort-button"
-    (click)="sortBy('category')">
-    Catégorie
-    <span>{{ sortSymbol('category') }}</span>
-  </button>
-</th>
+              <button
+                type="button"
+                class="sort-button"
+                (click)="sortBy('status')"
+              >
+                Statut
+                <span>{{ sortSymbol("status") }}</span>
+              </button>
+            </th>
             <th>
-  <button
-    type="button"
-    class="sort-button"
-    (click)="sortBy('quantity')">
-    Quantité
-    <span>{{ sortSymbol('quantity') }}</span>
-  </button>
-</th>
+              <button
+                type="button"
+                class="sort-button"
+                (click)="sortBy('category')"
+              >
+                Catégorie
+                <span>{{ sortSymbol("category") }}</span>
+              </button>
+            </th>
             <th>
-  <button
-    type="button"
-    class="sort-button"
-    (click)="sortBy('stock')">
-    Stock
-    <span>{{ sortSymbol('stock') }}</span>
-  </button>
-</th>
+              <button
+                type="button"
+                class="sort-button"
+                (click)="sortBy('quantity')"
+              >
+                Quantité
+                <span>{{ sortSymbol("quantity") }}</span>
+              </button>
+            </th>
             <th>
-  <button
-    type="button"
-    class="sort-button"
-    (click)="sortBy('price')">
-    Prix
-    <span>{{ sortSymbol('price') }}</span>
-  </button>
-</th>
+              <button
+                type="button"
+                class="sort-button"
+                (click)="sortBy('stock')"
+              >
+                Stock
+                <span>{{ sortSymbol("stock") }}</span>
+              </button>
+            </th>
             <th>
-  <button
-    type="button"
-    class="sort-button"
-    (click)="sortBy('active')">
-    Actif
-    <span>{{ sortSymbol('active') }}</span>
-  </button>
-</th>
-           <th>
-  <button
-    type="button"
-    class="sort-button"
-    (click)="sortBy('createdAt')">
-    Créé le
-    <span>{{ sortSymbol('createdAt') }}</span>
-  </button>
-</th>
+              <button
+                type="button"
+                class="sort-button"
+                (click)="sortBy('price')"
+              >
+                Prix
+                <span>{{ sortSymbol("price") }}</span>
+              </button>
+            </th>
             <th>
-              <span class="visually-hidden">
-                Actions
-              </span>
+              <button
+                type="button"
+                class="sort-button"
+                (click)="sortBy('active')"
+              >
+                Actif
+                <span>{{ sortSymbol("active") }}</span>
+              </button>
+            </th>
+            <th>
+              <button
+                type="button"
+                class="sort-button"
+                (click)="sortBy('createdAt')"
+              >
+                Créé le
+                <span>{{ sortSymbol("createdAt") }}</span>
+              </button>
+            </th>
+            <th>
+              <span class="visually-hidden"> Actions </span>
             </th>
           </tr>
         </thead>
 
         <tbody>
-
           @for (sample of samples(); track sample.id) {
-
             <tr>
+              <td>
+                <input
+                  type="checkbox"
+                  [checked]="isSelected(sample.id)"
+                  (change)="
+                    toggleSelection(sample.id, $any($event.target).checked)
+                  "
+                />
+              </td>
 
               <td>
-                <a
-                  class="sample-name"
-                  [routerLink]="['/samples', sample.id]">
+                <a class="sample-name" [routerLink]="['/samples', sample.id]">
                   {{ sample.name }}
                 </a>
               </td>
@@ -321,10 +318,17 @@
               <td>
                 <span
                   class="badge"
-                  [class.badge--created]="sample.status === SampleStatus.CREATED"
+                  [class.badge--created]="
+                    sample.status === SampleStatus.CREATED
+                  "
                   [class.badge--active]="sample.status === SampleStatus.ACTIVE"
-                  [class.badge--archived]="sample.status === SampleStatus.ARCHIVED"
-                  [class.badge--deleted]="sample.status === SampleStatus.DELETED">
+                  [class.badge--archived]="
+                    sample.status === SampleStatus.ARCHIVED
+                  "
+                  [class.badge--deleted]="
+                    sample.status === SampleStatus.DELETED
+                  "
+                >
                   {{ statusLabel(sample.status) }}
                 </span>
               </td>
@@ -338,30 +342,24 @@
               </td>
 
               <td>
-                {{ sample.stock ?? '—' }}
+                {{ sample.stock ?? "—" }}
               </td>
 
-              <td>
-                {{ sample.price }} €
-              </td>
+              <td>{{ sample.price }} €</td>
 
               <td>
                 @if (sample.active) {
-                  <span class="active-status active-status--yes">
-                    Oui
-                  </span>
+                  <span class="active-status active-status--yes"> Oui </span>
                 } @else {
-                  <span class="active-status active-status--no">
-                    Non
-                  </span>
+                  <span class="active-status active-status--no"> Non </span>
                 }
               </td>
 
               <td>
                 @if (sample.createdAt) {
-                    {{ sample.createdAt | date:'dd/MM/yyyy HH:mm' }}
+                  {{ sample.createdAt | date: "dd/MM/yyyy HH:mm" }}
                 } @else {
-                    —
+                  —
                 }
               </td>
 
@@ -371,18 +369,19 @@
                     [routerLink]="['/samples', sample.id]"
                     class="action-icon"
                     title="Consulter le sample"
-                    aria-label="Consulter le sample">
+                    aria-label="Consulter le sample"
+                  >
                     🔍
                   </a>
                 }
 
                 @if (canWrite()) {
-
                   <a
                     [routerLink]="['/samples', sample.id, 'edit']"
                     class="action-icon"
                     title="Modifier le sample"
-                    aria-label="Modifier le sample">
+                    aria-label="Modifier le sample"
+                  >
                     ✏️
                   </a>
 
@@ -392,7 +391,8 @@
                     [disabled]="loading()"
                     (click)="duplicate(sample.id)"
                     title="Dupliquer le sample"
-                    aria-label="Dupliquer le sample">
+                    aria-label="Dupliquer le sample"
+                  >
                     📋
                   </button>
 
@@ -402,38 +402,31 @@
                     [disabled]="loading()"
                     (click)="delete(sample.id)"
                     title="Supprimer le sample"
-                    aria-label="Supprimer le sample">
+                    aria-label="Supprimer le sample"
+                  >
                     🗑️
                   </button>
-
                 }
-
               </td>
-
             </tr>
-
           }
-
         </tbody>
       </table>
-
     </div>
 
     <div class="pagination">
-
       <p class="pagination__info">
-        {{ totalElements() }} sample(s)
-        ·
-        Page {{ currentPage() + 1 }} sur {{ totalPages() }}
+        {{ totalElements() }} sample(s) · Page {{ currentPage() + 1 }} sur
+        {{ totalPages() }}
       </p>
 
       <div class="pagination__actions">
-
         <button
           type="button"
           class="button"
           [disabled]="currentPage() === 0"
-          (click)="previousPage()">
+          (click)="previousPage()"
+        >
           Précédent
         </button>
 
@@ -441,13 +434,11 @@
           type="button"
           class="button"
           [disabled]="currentPage() + 1 >= totalPages()"
-          (click)="nextPage()">
+          (click)="nextPage()"
+        >
           Suivant
         </button>
-
       </div>
-
     </div>
   }
-
 </section>

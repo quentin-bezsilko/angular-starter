@@ -1,43 +1,32 @@
-import type { OnInit } from '@angular/core';
+import type { OnInit } from "@angular/core";
 import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  signal
-} from '@angular/core';
+  signal,
+} from "@angular/core";
 
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from "@angular/common";
 
-import {
-  ActivatedRoute,
-  RouterLink
-} from '@angular/router';
+import { ActivatedRoute, RouterLink } from "@angular/router";
 
-import type { HttpErrorResponse } from '@angular/common/http';
-import { finalize } from 'rxjs';
+import type { HttpErrorResponse } from "@angular/common/http";
+import { finalize } from "rxjs";
 
-import type {
-  Sample} from '../../model/sample.model';
-import {
-  SampleStatus
-} from '../../model/sample.model';
+import type { Sample } from "../../model/sample.model";
+import { SampleStatus } from "../../model/sample.model";
 
-import { SampleService } from '../../service/sample.service';
+import { SampleService } from "../../service/sample.service";
 
 @Component({
-  selector: 'app-sample-detail',
+  selector: "app-sample-detail",
   standalone: true,
-  imports: [
-    RouterLink,
-    DatePipe,
-    DecimalPipe
-  ],
-  templateUrl: './sample-detail.component.html',
-  styleUrl: './sample-detail.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  imports: [RouterLink, DatePipe, DecimalPipe],
+  templateUrl: "./sample-detail.component.html",
+  styleUrl: "./sample-detail.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SampleDetailComponent implements OnInit {
-
   private readonly route = inject(ActivatedRoute);
   private readonly sampleService = inject(SampleService);
 
@@ -48,12 +37,10 @@ export class SampleDetailComponent implements OnInit {
   readonly SampleStatus = SampleStatus;
 
   ngOnInit(): void {
-    const id = Number(
-      this.route.snapshot.paramMap.get('id')
-    );
+    const id = Number(this.route.snapshot.paramMap.get("id"));
 
     if (!Number.isInteger(id) || id <= 0) {
-      this.error.set('Identifiant du sample invalide.');
+      this.error.set("Identifiant du sample invalide.");
       return;
     }
 
@@ -69,42 +56,40 @@ export class SampleDetailComponent implements OnInit {
       .pipe(
         finalize(() => {
           this.loading.set(false);
-        })
+        }),
       )
       .subscribe({
-        next: sample => {
+        next: (sample) => {
           this.sample.set(sample);
         },
         error: (error: HttpErrorResponse) => {
           this.handleError(error);
-        }
+        },
       });
   }
 
   statusLabel(status: SampleStatus): string {
     switch (status) {
       case SampleStatus.CREATED:
-        return 'Créé';
+        return "Créé";
 
       case SampleStatus.ACTIVE:
-        return 'Actif';
+        return "Actif";
 
       case SampleStatus.ARCHIVED:
-        return 'Archivé';
+        return "Archivé";
 
       case SampleStatus.DELETED:
-        return 'Supprimé';
+        return "Supprimé";
     }
   }
 
   private handleError(error: HttpErrorResponse): void {
     if (error.status === 404) {
-      this.error.set('Le sample demandé est introuvable.');
+      this.error.set("Le sample demandé est introuvable.");
       return;
     }
 
-    this.error.set(
-      'Une erreur est survenue lors du chargement du sample.'
-    );
+    this.error.set("Une erreur est survenue lors du chargement du sample.");
   }
 }
