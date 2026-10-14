@@ -15,6 +15,7 @@ import { SampleStatus } from "../../model/sample.model";
 import { SampleService } from "../../service/sample.service";
 import { SampleBulkService } from "../../service/sample-bulk.service";
 import { AuthService } from "../../../auth/auth.service";
+import { SampleFavoriteService } from "../../service/sample-favorite.service";
 
 type SortDirection = "asc" | "desc";
 
@@ -29,6 +30,7 @@ type SortDirection = "asc" | "desc";
 export class SampleListComponent implements OnInit {
   private readonly sampleService = inject(SampleService);
   private readonly sampleBulkService = inject(SampleBulkService);
+  private readonly favoriteService = inject(SampleFavoriteService);
 
   readonly samples = signal<Sample[]>([]);
   readonly selectedIds = signal<Set<number>>(new Set());
@@ -48,6 +50,21 @@ export class SampleListComponent implements OnInit {
   readonly statusFilter = signal<SampleStatus | "">("");
   readonly categoryFilter = signal("");
   readonly activeFilter = signal<boolean | undefined>(undefined);
+  readonly favoritesOnly = signal(false);
+
+  readonly displayedSamples = computed(() => {
+    const samples = [...this.samples()];
+    samples.sort((a, b) => {
+      if (a.favorite === b.favorite) {
+        return 0;
+      }
+      return a.favorite ? -1 : 1;
+    });
+    if (this.favoritesOnly()) {
+      return samples.filter((sample) => sample.favorite);
+    }
+    return samples;
+  });
 
   readonly sortColumn = signal("id");
   readonly sortDirection = signal<SortDirection>("desc");
@@ -483,5 +500,47 @@ export class SampleListComponent implements OnInit {
           );
         },
       });
+  }
+
+  toggleFavorite(sample: Sample): void {
+    const favorite = !sample.favorite;
+
+    this.samples.update((samples) =>
+      samples.map((s) => (s.id === sample.id ? { ...s, favorite } : s)),
+    );
+
+    const request = favorite
+      ? this.favoriteService.addFavorite(sample.id)
+      : this.favoriteService.removeFavorite(sample.id);
+
+    request.subscribe({
+      error: () => {
+        this.samples.update((samples) =>
+          samples.map((s) =>
+            s.id === sample.id ? { ...s, favorite: !favorite } : s,
+          ),
+        );
+
+        this.error.set(
+          "Une erreur est survenue lors de la mise à jour du favori.",
+        );
+      },
+    });
+  }
+
+  private addFavorite(sample: Sample): void {
+    this.favoriteService.addFavorite(sample.id).subscribe({
+      next: () => {
+        sample.favorite = true;
+      },
+    });
+  }
+
+  private removeFavorite(sample: Sample): void {
+    this.favoriteService.removeFavorite(sample.id).subscribe({
+      next: () => {
+        sample.favorite = false;
+      },
+    });
   }
 }

@@ -1,5 +1,6 @@
 import type { Routes } from "@angular/router";
 import { authChildGuard } from "./auth/auth.guard";
+import { SampleFavoritesComponent } from "./samples/pages/sample-favorites/sample-favorites.component";
 
 export const routes: Routes = [
   {
@@ -32,6 +33,10 @@ export const routes: Routes = [
           import("./samples/components/sample-edit/sample-edit.component").then(
             (m) => m.SampleEditComponent,
           ),
+      },
+      {
+        path: "samples/favorites",
+        component: SampleFavoritesComponent,
       },
       {
         path: "samples/trash",

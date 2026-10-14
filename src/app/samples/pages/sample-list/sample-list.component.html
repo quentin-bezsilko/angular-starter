@@ -1,11 +1,8 @@
 <section class="sample-list">
   <header class="sample-list__header">
-    <div>
-      <h1>Samples</h1>
-      <p>Consultez et gérez les samples existants.</p>
-    </div>
-
     <div class="header-actions">
+      <a class="button" routerLink="/samples/favorites"> ⭐ Favoris </a>
+
       <a class="button" routerLink="/samples/trash"> 🗑️ Corbeille </a>
 
       <a class="button button--primary" routerLink="/samples/new">
@@ -166,6 +163,14 @@
       </select>
     </div>
 
+    <button
+      type="button"
+      class="button"
+      (click)="favoritesOnly.update((v) => !v)"
+    >
+      {{ favoritesOnly() ? "⭐ Favoris" : "⭐☆ Tous" }}
+    </button>
+
     <div class="filters__actions">
       <button
         type="button"
@@ -301,7 +306,7 @@
         </thead>
 
         <tbody>
-          @for (sample of samples(); track sample.id) {
+          @for (sample of displayedSamples(); track sample.id) {
             <tr>
               <td>
                 <input
@@ -365,6 +370,12 @@
                 } @else {
                   —
                 }
+              </td>
+
+              <td>
+                <button type="button" (click)="toggleFavorite(sample)">
+                  {{ sample.favorite ? "⭐" : "☆" }}
+                </button>
               </td>
 
               <td class="actions">

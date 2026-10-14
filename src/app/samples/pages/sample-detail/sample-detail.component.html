@@ -21,7 +21,13 @@
     <header class="sample-detail__header">
       <div>
         <div class="sample-detail__title">
-          <h1>{{ sample.name }}</h1>
+          <h1>
+            {{ sample.name }}
+
+            @if (sample.favorite) {
+              <span class="favorite-badge">⭐</span>
+            }
+          </h1>
 
           <span
             class="badge"

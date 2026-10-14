@@ -25,6 +25,7 @@ export interface Sample {
   comments: string | null;
   status: SampleStatus;
   version: number | null;
+  favorite: boolean;
 }
 
 export interface CreateSampleRequest {
