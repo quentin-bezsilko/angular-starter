@@ -6,9 +6,7 @@ import {
   signal,
   computed,
 } from "@angular/core";
-import { DatePipe } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { RouterLink } from "@angular/router";
+import { SampleImportResultComponent } from "../../components/sample-import-result/sample-import-result.component";
 import { debounceTime, distinctUntilChanged, finalize, Subject } from "rxjs";
 import type { ImportResult, Sample } from "../../model/sample.model";
 import { SampleStatus } from "../../model/sample.model";
@@ -16,13 +14,25 @@ import { SampleService } from "../../service/sample.service";
 import { SampleBulkService } from "../../service/sample-bulk.service";
 import { AuthService } from "../../../auth/auth.service";
 import { SampleFavoriteService } from "../../service/sample-favorite.service";
+import { SampleToolbarComponent } from "../../components/sample-toolbar/sample-toolbar.component";
+import { SampleBulkActionsComponent } from "../../components/sample-bulk-actions/sample-bulk-actions.component";
+import { SampleFiltersComponent } from "../../components/sample-filters/sample-filters.component";
+import { SamplePaginationComponent } from "../../components/sample-pagination/sample-pagination.component";
+import { SampleTableComponent } from "../../components/sample-table/sample-table.component";
 
 type SortDirection = "asc" | "desc";
 
 @Component({
   selector: "app-sample-list",
   standalone: true,
-  imports: [RouterLink, DatePipe, FormsModule],
+  imports: [
+    SampleToolbarComponent,
+    SampleBulkActionsComponent,
+    SampleImportResultComponent,
+    SampleFiltersComponent,
+    SamplePaginationComponent,
+    SampleTableComponent,
+  ],
   templateUrl: "./sample-list.component.html",
   styleUrl: "./sample-list.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -224,15 +234,7 @@ export class SampleListComponent implements OnInit {
       });
   }
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-
-    if (!input.files?.length) {
-      return;
-    }
-
-    const file = input.files[0];
-
+  onImportFile(file: File): void {
     this.sampleService.importSamples(file).subscribe({
       next: (result) => {
         this.importResult = result;
@@ -280,14 +282,6 @@ export class SampleListComponent implements OnInit {
     this.loadSamples(0);
   }
 
-  sortSymbol(column: string): string {
-    if (this.sortColumn() !== column) {
-      return "↕";
-    }
-
-    return this.sortDirection() === "asc" ? "↑" : "↓";
-  }
-
   previousPage(): void {
     if (this.currentPage() > 0) {
       this.loadSamples(this.currentPage() - 1);
@@ -297,22 +291,6 @@ export class SampleListComponent implements OnInit {
   nextPage(): void {
     if (this.currentPage() + 1 < this.totalPages()) {
       this.loadSamples(this.currentPage() + 1);
-    }
-  }
-
-  statusLabel(status: SampleStatus): string {
-    switch (status) {
-      case SampleStatus.CREATED:
-        return "Créé";
-
-      case SampleStatus.ACTIVE:
-        return "Actif";
-
-      case SampleStatus.ARCHIVED:
-        return "Archivé";
-
-      case SampleStatus.DELETED:
-        return "Dans la corbeille";
     }
   }
 
@@ -328,10 +306,6 @@ export class SampleListComponent implements OnInit {
     this.selectedIds.set(next);
   }
 
-  isSelected(id: number): boolean {
-    return this.selectedIds().has(id);
-  }
-
   toggleAll(checked: boolean): void {
     const next = new Set(this.selectedIds());
     if (checked) {
@@ -344,14 +318,6 @@ export class SampleListComponent implements OnInit {
       });
     }
     this.selectedIds.set(next);
-  }
-
-  areAllSelected(): boolean {
-    const samples = this.samples();
-    return (
-      samples.length > 0 &&
-      samples.every((sample) => this.selectedIds().has(sample.id))
-    );
   }
 
   getSelectedIds(): number[] {
@@ -524,22 +490,6 @@ export class SampleListComponent implements OnInit {
         this.error.set(
           "Une erreur est survenue lors de la mise à jour du favori.",
         );
-      },
-    });
-  }
-
-  private addFavorite(sample: Sample): void {
-    this.favoriteService.addFavorite(sample.id).subscribe({
-      next: () => {
-        sample.favorite = true;
-      },
-    });
-  }
-
-  private removeFavorite(sample: Sample): void {
-    this.favoriteService.removeFavorite(sample.id).subscribe({
-      next: () => {
-        sample.favorite = false;
       },
     });
   }

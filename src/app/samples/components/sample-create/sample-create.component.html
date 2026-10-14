@@ -1,15 +1,11 @@
 <section class="sample-create">
-  <nav class="sample-create__navigation">
-    <a routerLink="/samples"> ← Retour aux samples </a>
-  </nav>
 
-  <header class="sample-create__header">
-    <div>
-      <h1>Créer un sample</h1>
-
-      <p>Renseignez les informations du nouveau sample.</p>
-    </div>
-  </header>
+  <app-page-header
+    title="Créer un sample"
+    description="Renseignez les informations du nouveau sample."
+    backLink="/samples"
+    backLabel="← Retour aux samples"
+  />
 
   @if (error()) {
     <div class="global-error">
@@ -22,4 +18,5 @@
     (formSubmit)="createSample($event)"
   >
   </app-sample-form>
+
 </section>

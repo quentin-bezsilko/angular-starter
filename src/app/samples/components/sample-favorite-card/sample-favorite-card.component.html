@@ -1,0 +1,20 @@
+<a
+  class="favorite-card"
+  [routerLink]="['/samples', sample.id]"
+>
+  <div class="favorite-card__header">
+    <span>⭐</span>
+
+    <strong>
+      {{ sample.name }}
+    </strong>
+  </div>
+
+  <p>
+    {{ sample.description || "Aucune description" }}
+  </p>
+
+  <small>
+    {{ sample.status }}
+  </small>
+</a>

@@ -1,0 +1,84 @@
+<div class="filters">
+  <div class="filters__search">
+    <label for="sample-search">Rechercher</label>
+
+    <input
+      id="sample-search"
+      type="search"
+      placeholder="Nom, description, commentaire..."
+      [ngModel]="search"
+      (ngModelChange)="searchChange.emit($event)"
+    />
+  </div>
+
+  <div class="filters__field">
+    <label for="status-filter">Statut</label>
+
+    <select
+      id="status-filter"
+      [ngModel]="status"
+      (ngModelChange)="statusChange.emit($event)"
+    >
+      <option value="">Tous</option>
+
+      @for (status of statuses; track status) {
+        <option [value]="status">
+          {{ statusLabel(status) }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <div class="filters__field">
+    <label for="category-filter">Catégorie</label>
+
+    <input
+      id="category-filter"
+      type="text"
+      maxlength="1"
+      placeholder="A"
+      [ngModel]="category"
+      (ngModelChange)="categoryChange.emit($event)"
+    />
+  </div>
+
+  <div class="filters__field">
+    <label for="active-filter">Actif</label>
+
+    <select
+      id="active-filter"
+      [ngModel]="active"
+      (ngModelChange)="activeChange.emit($event)"
+    >
+      <option value="">Tous</option>
+      <option [ngValue]="true">Oui</option>
+      <option [ngValue]="false">Non</option>
+    </select>
+  </div>
+
+  <button
+    type="button"
+    class="button"
+    (click)="toggleFavorites.emit()"
+  >
+    {{ favoritesOnly ? "⭐ Favoris" : "⭐☆ Tous" }}
+  </button>
+
+  <div class="filters__actions">
+    <button
+      type="button"
+      class="button button--primary"
+      (click)="apply.emit()"
+    >
+      Rechercher
+    </button>
+
+    <button
+      type="button"
+      class="button"
+      (click)="reset.emit()"
+    >
+      Réinitialiser
+    </button>
+  </div>
+</div>

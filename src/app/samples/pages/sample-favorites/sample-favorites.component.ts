@@ -1,21 +1,21 @@
-import type {
-  OnInit} from "@angular/core";
+import type { OnInit } from "@angular/core";
 import {
   ChangeDetectionStrategy,
   Component,
   inject,
   signal,
 } from "@angular/core";
-import { RouterLink } from "@angular/router";
+import { PageHeaderComponent } from "../../components/page-header/page-header.component";
 import { finalize } from "rxjs";
 
 import type { Sample } from "../../model/sample.model";
 import { SampleService } from "../../service/sample.service";
+import { SampleFavoriteCardComponent } from "../../components/sample-favorite-card/sample-favorite-card.component";
 
 @Component({
   selector: "app-sample-favorites",
   standalone: true,
-  imports: [RouterLink],
+  imports: [PageHeaderComponent, SampleFavoriteCardComponent],
   templateUrl: "./sample-favorites.component.html",
   styleUrl: "./sample-favorites.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,

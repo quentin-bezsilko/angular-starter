@@ -1,42 +1,36 @@
 <section class="favorites">
-  <header class="favorites__header">
-    <div>
-      <h1>Mes favoris</h1>
-      <p>Retrouvez vos samples favoris.</p>
-    </div>
-
-    <a class="button" routerLink="/samples"> ← Retour à la liste </a>
-  </header>
+  <app-page-header
+    title="Mes favoris"
+    description="Retrouvez vos samples favoris."
+    backLink="/samples"
+    backLabel="← Retour à la liste"
+  />
 
   @if (loading()) {
     <div class="state">Chargement...</div>
+
   } @else if (error()) {
+
     <div class="state state--error">
       {{ error() }}
     </div>
+
   } @else if (samples().length === 0) {
+
     <div class="state">
       <h2>Aucun favori</h2>
       <p>Vous n'avez aucun sample favori.</p>
     </div>
+
   } @else {
+
     <div class="favorites-grid">
       @for (sample of samples(); track sample.id) {
-        <a class="favorite-card" [routerLink]="['/samples', sample.id]">
-          <div class="favorite-card__header">
-            <span>⭐</span>
-            <strong>{{ sample.name }}</strong>
-          </div>
-
-          <p>
-            {{ sample.description || "Aucune description" }}
-          </p>
-
-          <small>
-            {{ sample.status }}
-          </small>
-        </a>
+        <app-sample-favorite-card
+          [sample]="sample"
+        />
       }
     </div>
+
   }
 </section>

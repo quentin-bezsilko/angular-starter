@@ -75,3 +75,21 @@ export interface ImportError {
   row: number;
   message: string;
 }
+
+export interface SampleFilters {
+  search?: string;
+  status?: SampleStatus;
+  category?: string;
+  active?: boolean;
+  favoritesOnly: boolean;
+}
+
+export type SortColumn =
+  | "name"
+  | "status"
+  | "category"
+  | "quantity"
+  | "stock"
+  | "price"
+  | "active"
+  | "createdAt";

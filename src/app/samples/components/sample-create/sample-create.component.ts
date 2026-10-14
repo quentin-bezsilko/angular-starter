@@ -5,7 +5,7 @@ import {
   signal,
 } from "@angular/core";
 
-import { Router, RouterLink } from "@angular/router";
+import { Router } from "@angular/router";
 
 import { finalize } from "rxjs";
 
@@ -14,11 +14,12 @@ import type { SampleFormValue } from "../../components/sample-form/sample-form.c
 
 import { SampleService } from "../../service/sample.service";
 import type { CreateSampleRequest } from "../../model/sample.model";
+import { PageHeaderComponent } from "../page-header/page-header.component";
 
 @Component({
   selector: "app-sample-create",
   standalone: true,
-  imports: [RouterLink, SampleFormComponent],
+  imports: [SampleFormComponent, PageHeaderComponent],
   templateUrl: "./sample-create.component.html",
   styleUrl: "./sample-create.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,

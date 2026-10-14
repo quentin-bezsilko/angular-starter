@@ -1,0 +1,216 @@
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>
+          <input
+            type="checkbox"
+            [checked]="areAllSelected()"
+            (change)="toggleAll.emit($any($event.target).checked)"
+          />
+        </th>
+        <th>
+          <button type="button" class="sort-button" (click)="sort.emit('name')">
+            Nom
+            <span>{{ sortSymbol("name") }}</span>
+          </button>
+        </th>
+        <th>
+          <button
+            type="button"
+            class="sort-button"
+            (click)="sort.emit('status')"
+          >
+            Statut
+            <span>{{ sortSymbol("status") }}</span>
+          </button>
+        </th>
+        <th>
+          <button
+            type="button"
+            class="sort-button"
+            (click)="sort.emit('category')"
+          >
+            Catégorie
+            <span>{{ sortSymbol("category") }}</span>
+          </button>
+        </th>
+        <th>
+          <button
+            type="button"
+            class="sort-button"
+            (click)="sort.emit('quantity')"
+          >
+            Quantité
+            <span>{{ sortSymbol("quantity") }}</span>
+          </button>
+        </th>
+        <th>
+          <button
+            type="button"
+            class="sort-button"
+            (click)="sort.emit('stock')"
+          >
+            Stock
+            <span>{{ sortSymbol("stock") }}</span>
+          </button>
+        </th>
+        <th>
+          <button
+            type="button"
+            class="sort-button"
+            (click)="sort.emit('price')"
+          >
+            Prix
+            <span>{{ sortSymbol("price") }}</span>
+          </button>
+        </th>
+        <th>
+          <button
+            type="button"
+            class="sort-button"
+            (click)="sort.emit('active')"
+          >
+            Actif
+            <span>{{ sortSymbol("active") }}</span>
+          </button>
+        </th>
+        <th>
+          <button
+            type="button"
+            class="sort-button"
+            (click)="sort.emit('createdAt')"
+          >
+            Créé le
+            <span>{{ sortSymbol("createdAt") }}</span>
+          </button>
+        </th>
+        <th>
+          <span class="visually-hidden"> Favori </span>
+        </th>
+        <th>
+          <span class="visually-hidden"> Actions </span>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (sample of samples; track sample.id) {
+        <tr>
+          <td>
+            <input
+              type="checkbox"
+              [checked]="isSelected(sample.id)"
+              (change)="onToggleSelection(sample.id, $event)"
+            />
+          </td>
+
+          <td>
+            <a class="sample-name" [routerLink]="['/samples', sample.id]">
+              {{ sample.name }}
+            </a>
+          </td>
+
+          <td>
+            <span
+              class="badge"
+              [class.badge--created]="sample.status === SampleStatus.CREATED"
+              [class.badge--active]="sample.status === SampleStatus.ACTIVE"
+              [class.badge--archived]="sample.status === SampleStatus.ARCHIVED"
+              [class.badge--deleted]="sample.status === SampleStatus.DELETED"
+            >
+              {{ statusLabel(sample.status) }}
+            </span>
+          </td>
+
+          <td>
+            {{ sample.category }}
+          </td>
+
+          <td>
+            {{ sample.quantity }}
+          </td>
+
+          <td>
+            {{ sample.stock ?? "—" }}
+          </td>
+
+          <td>{{ sample.price }} €</td>
+
+          <td>
+            @if (sample.active) {
+              <span class="active-status active-status--yes"> Oui </span>
+            } @else {
+              <span class="active-status active-status--no"> Non </span>
+            }
+          </td>
+
+          <td>
+            @if (sample.createdAt) {
+              {{ sample.createdAt | date: "dd/MM/yyyy HH:mm" }}
+            } @else {
+              —
+            }
+          </td>
+
+          <td>
+            <button
+              type="button"
+              title="Ajouter aux favoris"
+              aria-label="Ajouter aux favoris"
+              (click)="toggleFavorite.emit(sample)"
+            >
+              {{ sample.favorite ? "⭐" : "☆" }}
+            </button>
+          </td>
+
+          <td class="actions">
+            @if (canRead) {
+              <a
+                [routerLink]="['/samples', sample.id]"
+                class="action-icon"
+                title="Consulter le sample"
+                aria-label="Consulter le sample"
+              >
+                🔍
+              </a>
+            }
+
+            @if (canWrite) {
+              <a
+                [routerLink]="['/samples', sample.id, 'edit']"
+                class="action-icon"
+                title="Modifier le sample"
+                aria-label="Modifier le sample"
+              >
+                ✏️
+              </a>
+
+              <button
+                type="button"
+                class="action-icon"
+                [disabled]="loading"
+                (click)="duplicate.emit(sample.id)"
+                title="Dupliquer le sample"
+                aria-label="Dupliquer le sample"
+              >
+                📋
+              </button>
+
+              <button
+                type="button"
+                class="action-icon action-icon--danger"
+                [disabled]="loading"
+                (click)="moveToTrash.emit(sample.id)"
+                title="Déplacer le sample dans la corbeille"
+                aria-label="Déplacer le sample dans la corbeille"
+              >
+                🗑️
+              </button>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

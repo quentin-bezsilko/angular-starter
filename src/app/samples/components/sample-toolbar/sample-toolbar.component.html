@@ -1,0 +1,54 @@
+<div class="toolbar">
+  <div class="toolbar__actions">
+    <a
+      class="button button--nav"
+      routerLink="/samples/favorites"
+    >
+      ⭐ Favoris
+    </a>
+
+    <a
+      class="button button--nav"
+      routerLink="/samples/trash"
+    >
+      🗑️ Corbeille
+    </a>
+
+    @if (canWrite) {
+      <a
+        class="button button--nav"
+        routerLink="/samples/new"
+      >
+      📄 Nouveau sample
+      </a>
+    }
+  </div>
+
+  <div class="toolbar__actions">
+    
+
+    <button
+      type="button"
+      class="button"
+      (click)="export.emit()"
+    >
+      📤 Exporter
+    </button>
+
+    <button
+      type="button"
+      class="button"
+      (click)="fileInput.click()"
+    >
+      📥 Importer
+    </button>
+
+    <input
+      #fileInput
+      type="file"
+      hidden
+      accept=".xlsx"
+      (change)="onFileSelected($event)"
+    />
+  </div>
+</div>

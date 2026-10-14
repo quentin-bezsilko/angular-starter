@@ -192,6 +192,7 @@ export CSV/Excel (ok)
 import en masse (ok)
 sélection multiple et actions groupées - export, duplication, suppression et activation des samples sélectionnés uniquement (ok)
 archivage plutôt que suppression physique (ok)
+favoris (ok)
 
 - historique / audit (créer une table SampleHistory de l'historique des modifications, )
   @Entity
@@ -205,8 +206,7 @@ archivage plutôt que suppression physique (ok)
   String details;
   }
   Sample > Détail > Historique > Commentaires
-- dashboard avec quelques statistiques
-- favoris / samples récemment consultés
+- dashboard avec quelques statistiques (un joli dashboard avec nombre de samples, favoris, actifs, archivés, corbeille)
 
 Puis Faire un README professionnel
 

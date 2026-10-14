@@ -16,28 +16,6 @@
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
 
-.favorite-card {
-  display: block;
-  padding: 1rem;
-  border: 1px solid #dcdcdc;
-  border-radius: 0.75rem;
-  text-decoration: none;
-  color: inherit;
-  transition: 0.2s;
-}
-
-.favorite-card:hover {
-  border-color: #f0b400;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
-}
-
-.favorite-card__header {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  margin-bottom: 0.75rem;
-}
-
 .state {
   padding: 2rem;
   text-align: center;

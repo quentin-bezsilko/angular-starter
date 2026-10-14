@@ -1,1 +1,58 @@
-/* You can add global styles to this file, and also import other style files */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  min-height: 2.5rem;
+  padding: 0.625rem 1rem;
+  margin: 0.8em;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+
+  background-color: #fff;
+  color: #0f172a;
+
+  cursor: pointer;
+  text-decoration: none;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.button:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+
+  transform: translateY(-1px);
+}
+
+.button:focus-visible {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 20%);
+}
+
+.button--compact {
+  padding: 0.375rem 0.75rem;
+  min-height: 1.875rem;
+
+  font-size: 0.875rem;
+}
+
+.button--nav {
+  min-height: auto;
+  padding: 0.5rem 0.875rem;
+  margin-top: 0.8em;
+  color: #475569;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.button--nav:hover {
+  background-color: #f8fafc;
+  color: #0f172a;
+}

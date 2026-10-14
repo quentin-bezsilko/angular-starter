@@ -1,0 +1,23 @@
+<div class="bulk-actions">
+  <span> {{ selectedCount }} sample(s) sélectionné(s) </span>
+
+  <button type="button" class="button" (click)="export.emit()">
+    📤 Export
+  </button>
+
+  <button type="button" class="button" (click)="duplicate.emit()">
+    📋 Dupliquer
+  </button>
+
+  <button type="button" class="button" (click)="activate.emit()">
+    🔄 Activer
+  </button>
+
+  <button
+    type="button"
+    class="button button--danger"
+    (click)="moveToTrash.emit()"
+  >
+    🗑️ Mettre à la corbeille
+  </button>
+</div>

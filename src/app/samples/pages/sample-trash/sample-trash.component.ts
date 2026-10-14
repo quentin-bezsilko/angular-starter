@@ -6,21 +6,22 @@ import {
   inject,
   signal,
 } from "@angular/core";
-import { DatePipe } from "@angular/common";
-import { RouterLink } from "@angular/router";
+import { SampleTrashBulkActionsComponent } from "../../components/sample-trash-bulk-actions/sample-trash-bulk-actions.component";
 import { finalize } from "rxjs";
 
 import type { Sample } from "../../model/sample.model";
 import { SampleStatus } from "../../model/sample.model";
 import { SampleService } from "../../service/sample.service";
 import { SampleBulkService } from "../../service/sample-bulk.service";
+import { PageHeaderComponent } from "../../components/page-header/page-header.component";
+import { SampleTrashTableComponent } from "../../components/sample-trash-table/sample-trash-table.component";
 
 type SortDirection = "asc" | "desc";
 
 @Component({
   selector: "app-sample-trash",
   standalone: true,
-  imports: [RouterLink, DatePipe],
+  imports: [PageHeaderComponent, SampleTrashBulkActionsComponent, SampleTrashTableComponent],
   templateUrl: "./sample-trash.component.html",
   styleUrl: "./sample-trash.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -146,14 +147,6 @@ export class SampleTrashComponent implements OnInit {
     }
 
     this.loadSamples();
-  }
-
-  sortSymbol(column: string): string {
-    if (this.sortColumn() !== column) {
-      return "↕";
-    }
-
-    return this.sortDirection() === "asc" ? "↑" : "↓";
   }
 
   getSelectedIds(): number[] {

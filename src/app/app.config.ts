@@ -1,7 +1,11 @@
 import type { ApplicationConfig } from "@angular/core";
 import { inject, provideAppInitializer } from "@angular/core";
 
-import { provideHttpClient, withInterceptors } from "@angular/common/http";
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from "@angular/common/http";
 import { provideRouter } from "@angular/router";
 import { firstValueFrom } from "rxjs";
 
@@ -13,7 +17,10 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
 
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([authInterceptor]),
+    ),
 
     provideAppInitializer(() => {
       const authService = inject(AuthService);
