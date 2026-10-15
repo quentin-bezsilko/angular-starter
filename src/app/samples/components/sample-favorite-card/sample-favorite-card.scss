@@ -1,0 +1,40 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.favorite-card {
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+  padding: 1rem;
+
+  border: 2px solid #e2e8f0;
+  border-radius: 0.75rem;
+
+  background-color: #fff;
+
+  color: inherit;
+  text-decoration: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.favorite-card:hover {
+  border-color: #f0b400;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+  transform: translateY(-2px);
+}
+
+.favorite-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  margin-bottom: 0.75rem;
+}

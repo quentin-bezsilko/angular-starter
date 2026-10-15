@@ -10,8 +10,8 @@ import { provideRouter } from "@angular/router";
 import { firstValueFrom } from "rxjs";
 
 import { routes } from "./app.routes";
-import { AuthService } from "./auth/auth.service";
-import { authInterceptor } from "./auth/auth.interceptor";
+import { AuthService } from "./auth/auth-service";
+import { authInterceptor } from "./auth/auth-interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [

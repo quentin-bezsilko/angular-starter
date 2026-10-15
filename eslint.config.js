@@ -60,7 +60,7 @@ module.exports = defineConfig([
   },
 
   {
-    files: ["src/**/*.component.ts"],
+    files: ["src/**/*.ts"],
 
     rules: {
       "@typescript-eslint/unbound-method": "off",

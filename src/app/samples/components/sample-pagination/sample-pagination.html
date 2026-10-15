@@ -1,0 +1,26 @@
+<div class="pagination">
+  <p class="pagination__info">
+    {{ totalElements }} sample(s) · Page {{ currentPage + 1 }} sur {{ totalPages
+    }}
+  </p>
+
+  <div class="pagination__actions">
+    <button
+      type="button"
+      class="button"
+      [disabled]="currentPage === 0"
+      (click)="previous.emit()"
+    >
+      Précédent
+    </button>
+
+    <button
+      type="button"
+      class="button"
+      [disabled]="currentPage + 1 >= totalPages"
+      (click)="next.emit()"
+    >
+      Suivant
+    </button>
+  </div>
+</div>

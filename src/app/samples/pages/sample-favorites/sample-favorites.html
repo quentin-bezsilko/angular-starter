@@ -1,0 +1,32 @@
+<section class="favorites">
+  <app-page-header
+    title="Mes favoris"
+    description="Retrouvez vos samples favoris."
+    backLink="/samples"
+    backLabel="← Retour à la liste"
+  />
+
+  @if (loading()) {
+  <div class="state">Chargement...</div>
+
+  } @else if (error()) {
+
+  <div class="state state--error">{{ error() }}</div>
+
+  } @else if (samples().length === 0) {
+
+  <div class="state">
+    <h2>Aucun favori</h2>
+    <p>Vous n'avez aucun sample favori.</p>
+  </div>
+
+  } @else {
+
+  <div class="favorites-grid">
+    @for (sample of samples(); track sample.id) {
+    <app-sample-favorite-card [sample]="sample" />
+    }
+  </div>
+
+  }
+</section>

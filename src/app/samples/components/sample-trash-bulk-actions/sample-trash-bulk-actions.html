@@ -1,0 +1,15 @@
+<div class="bulk-actions">
+  <span> {{ selectedCount }} sample(s) sélectionné(s) </span>
+
+  <button type="button" class="button" (click)="restore.emit()">
+    ♻️ Restaurer
+  </button>
+
+  <button
+    type="button"
+    class="button button--danger"
+    (click)="deleteForever.emit()"
+  >
+    ❌ Supprimer définitivement
+  </button>
+</div>

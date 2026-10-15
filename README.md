@@ -207,6 +207,83 @@ favoris (ok)
   }
   Sample > Détail > Historique > Commentaires
 - dashboard avec quelques statistiques (un joli dashboard avec nombre de samples, favoris, actifs, archivés, corbeille)
+  Service à créer côté backend
+  {
+  "overview": {
+  "totalSamples": 1250,
+  "activeSamples": 980,
+  "inactiveSamples": 270,
+  "favoriteSamples": 320
+  },
+  "statusDistribution": [
+  {
+  "status": "CREATED",
+  "count": 450
+  },
+  {
+  "status": "IN_PROGRESS",
+  "count": 320
+  },
+  {
+  "status": "COMPLETED",
+  "count": 420
+  },
+  {
+  "status": "REJECTED",
+  "count": 60
+  }
+  ],
+  "categoryDistribution": [
+  {
+  "category": "A",
+  "count": 500
+  },
+  {
+  "category": "B",
+  "count": 350
+  },
+  {
+  "category": "C",
+  "count": 250
+  },
+  {
+  "category": "D",
+  "count": 150
+  }
+  ],
+  "favoriteDistribution": {
+  "favorites": 320,
+  "nonFavorites": 930
+  },
+  "stockDistribution": {
+  "withStock": 1120,
+  "withoutStock": 130
+  },
+  "monthlyCreations": [
+  {
+  "month": "2026-01",
+  "count": 85
+  },
+  {
+  "month": "2026-02",
+  "count": 104
+  },
+  {
+  "month": "2026-03",
+  "count": 127
+  }
+  ],
+  "priceStatistics": {
+  "min": 9.99,
+  "max": 1499.99,
+  "average": 256.74
+  },
+  "quantityStatistics": {
+  "min": 1,
+  "max": 1000,
+  "average": 145.2
+  }
+  }
 
 Puis Faire un README professionnel
 

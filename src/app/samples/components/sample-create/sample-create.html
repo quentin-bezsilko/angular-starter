@@ -1,0 +1,18 @@
+<section class="sample-create">
+  <app-page-header
+    title="Créer un sample"
+    description="Renseignez les informations du nouveau sample."
+    backLink="/samples"
+    backLabel="← Retour aux samples"
+  />
+
+  @if (error()) {
+  <div class="global-error">{{ error() }}</div>
+  }
+
+  <app-sample-form
+    [submitting]="submitting()"
+    (formSubmit)="createSample($event)"
+  >
+  </app-sample-form>
+</section>

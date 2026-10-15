@@ -1,0 +1,83 @@
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+
+        <th>
+          <button type="button" class="sort-button" (click)="sort.emit('name')">
+            Nom
+            <span>{{ sortSymbol("name") }}</span>
+          </button>
+        </th>
+
+        <th>
+          <button
+            type="button"
+            class="sort-button"
+            (click)="sort.emit('category')"
+          >
+            Catégorie
+            <span>{{ sortSymbol("category") }}</span>
+          </button>
+        </th>
+
+        <th>
+          <button
+            type="button"
+            class="sort-button"
+            (click)="sort.emit('createdAt')"
+          >
+            Créé le
+            <span>{{ sortSymbol("createdAt") }}</span>
+          </button>
+        </th>
+
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (sample of samples; track sample.id) {
+      <tr>
+        <td>
+          <input
+            type="checkbox"
+            [checked]="isSelected(sample.id)"
+            (change)="onToggleSelection(sample.id, $event)"
+          />
+        </td>
+
+        <td>{{ sample.name }}</td>
+
+        <td>{{ sample.category }}</td>
+
+        <td>
+          @if (sample.createdAt) { {{ sample.createdAt | date: "dd/MM/yyyy
+          HH:mm" }} } @else { — }
+        </td>
+
+        <td class="actions">
+          <button
+            type="button"
+            class="action-icon"
+            (click)="restore.emit(sample.id)"
+            title="Restaurer"
+          >
+            ♻️
+          </button>
+
+          <button
+            type="button"
+            class="action-icon action-icon--danger"
+            (click)="deleteForever.emit(sample.id)"
+            title="Supprimer définitivement"
+          >
+            ❌
+          </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

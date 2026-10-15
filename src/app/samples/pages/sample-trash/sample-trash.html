@@ -1,0 +1,35 @@
+<section class="sample-list">
+  <app-page-header
+    title="Corbeille"
+    description="Samples supprimés pouvant être restaurés."
+    backLink="/samples"
+    backLabel="← Retour à la liste"
+  />
+
+  @if (hasSelection()) {
+  <app-sample-trash-bulk-actions
+    [selectedCount]="selectedCount()"
+    (restore)="bulkRestore()"
+    (deleteForever)="bulkDeleteForever()"
+  />
+  } @if (loading()) {
+  <div class="state">Chargement...</div>
+  } @else if (error()) {
+  <div class="state state--error">{{ error() }}</div>
+  } @else if (samples().length === 0) {
+  <div class="state">
+    <h2>Corbeille vide</h2>
+  </div>
+  } @else {
+  <app-sample-trash-table
+    [samples]="samples()"
+    [selectedIds]="selectedIds()"
+    [sortColumn]="sortColumn()"
+    [sortDirection]="sortDirection()"
+    (sort)="sortBy($event)"
+    (toggleSelection)="toggleSelection($event.id, $event.checked)"
+    (restore)="restore($event)"
+    (deleteForever)="deleteForever($event)"
+  />
+  }
+</section>
