@@ -12,5 +12,5 @@ export class SampleImportResult {
   result!: ImportResult;
 
   @Output()
-  close = new EventEmitter<void>();
+  closed = new EventEmitter<void>();
 }

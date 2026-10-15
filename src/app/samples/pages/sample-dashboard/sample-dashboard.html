@@ -1,1 +1,154 @@
-<p>sample-dashboard works!</p>
+<div class="dashboard">
+  <h1>Dashboard</h1>
+
+  @if (loading) {
+  <p>Chargement...</p>
+  } @if (error) {
+  <p class="error">{{ error }}</p>
+  } @if (statistics) {
+
+  <section class="kpi-grid">
+    <div class="card kpi">
+      <span class="label">Total samples</span>
+      <span class="value"> {{ statistics.overview.totalSamples }} </span>
+    </div>
+
+    <div class="card kpi">
+      <span class="label">Actifs</span>
+      <span class="value"> {{ statistics.overview.activeSamples }} </span>
+    </div>
+
+    <div class="card kpi">
+      <span class="label">Inactifs</span>
+      <span class="value"> {{ statistics.overview.inactiveSamples }} </span>
+    </div>
+
+    <div class="card kpi">
+      <span class="label">Favoris</span>
+      <span class="value"> {{ statistics.overview.favoriteSamples }} </span>
+    </div>
+
+    <div class="card kpi">
+      <span class="label">Supprimés</span>
+      <span class="value"> {{ statistics.overview.trashedSamples }} </span>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h2>Statuts</h2>
+
+      @for (status of statistics.statusDistribution; track status.status) {
+      <div class="row">
+        <span>{{ status.status }}</span>
+        <strong>{{ status.count }}</strong>
+      </div>
+      }
+    </div>
+
+    <div class="card">
+      <h2>Catégories</h2>
+
+      @for (category of statistics.categoryDistribution; track
+      category.category) {
+      <div class="row">
+        <span>{{ category.category }}</span>
+        <strong>{{ category.count }}</strong>
+      </div>
+      }
+    </div>
+
+    <div class="card">
+      <h2>Favoris</h2>
+
+      <div class="row">
+        <span>Favoris</span>
+        <strong>{{ statistics.favoriteDistribution.favorites }}</strong>
+      </div>
+
+      <div class="row">
+        <span>Non favoris</span>
+        <strong>{{ statistics.favoriteDistribution.nonFavorites }}</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Stock</h2>
+
+      <div class="row">
+        <span>Avec stock</span>
+        <strong>{{ statistics.stockDistribution.withStock }}</strong>
+      </div>
+
+      <div class="row">
+        <span>Sans stock</span>
+        <strong>{{ statistics.stockDistribution.withoutStock }}</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Corbeille</h2>
+
+      <div class="row">
+        <span>Supprimés</span>
+        <strong>{{ statistics.trashDistribution.trashed }}</strong>
+      </div>
+
+      <div class="row">
+        <span>Actifs</span>
+        <strong>{{ statistics.trashDistribution.active }}</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Créations mensuelles</h2>
+
+      @for (month of statistics.monthlyCreations; track month.month) {
+      <div class="row">
+        <span>{{ month.month }}</span>
+        <strong>{{ month.count }}</strong>
+      </div>
+      }
+    </div>
+
+    <div class="card">
+      <h2>Prix</h2>
+
+      <div class="row">
+        <span>Min</span>
+        <strong>{{ statistics.priceStatistics.min }}</strong>
+      </div>
+
+      <div class="row">
+        <span>Moyenne</span>
+        <strong>{{ statistics.priceStatistics.average }}</strong>
+      </div>
+
+      <div class="row">
+        <span>Max</span>
+        <strong>{{ statistics.priceStatistics.max }}</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Quantités</h2>
+
+      <div class="row">
+        <span>Min</span>
+        <strong>{{ statistics.quantityStatistics.min }}</strong>
+      </div>
+
+      <div class="row">
+        <span>Moyenne</span>
+        <strong>{{ statistics.quantityStatistics.average }}</strong>
+      </div>
+
+      <div class="row">
+        <span>Max</span>
+        <strong>{{ statistics.quantityStatistics.max }}</strong>
+      </div>
+    </div>
+  </section>
+
+  }
+</div>

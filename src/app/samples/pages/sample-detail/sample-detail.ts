@@ -10,7 +10,7 @@ import { DatePipe, DecimalPipe } from "@angular/common";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import type { HttpErrorResponse } from "@angular/common/http";
 import { finalize } from "rxjs";
-import type { Sample} from "../../model/sample";
+import type { Sample } from "../../model/sample";
 import { SampleStatus } from "../../model/sample";
 import { SampleService } from "../../service/sample-service";
 

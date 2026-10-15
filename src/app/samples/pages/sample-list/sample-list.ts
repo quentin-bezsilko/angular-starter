@@ -63,17 +63,13 @@ export class SampleList implements OnInit {
   readonly favoritesOnly = signal(false);
 
   readonly displayedSamples = computed(() => {
-    const samples = [...this.samples()];
-    samples.sort((a, b) => {
-      if (a.favorite === b.favorite) {
-        return 0;
-      }
-      return a.favorite ? -1 : 1;
-    });
     if (this.favoritesOnly()) {
-      return samples.filter((sample) => sample.favorite);
+      return this.samples().filter(
+        (sample) => sample.favorite,
+      );
     }
-    return samples;
+
+    return this.samples();
   });
 
   readonly sortColumn = signal("id");

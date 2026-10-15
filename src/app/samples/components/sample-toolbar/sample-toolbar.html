@@ -3,9 +3,10 @@
     <a class="button button--nav" routerLink="/samples/favorites">
       ⭐ Favoris
     </a>
-
     <a class="button button--nav" routerLink="/samples/trash"> 🗑️ Corbeille </a>
-
+    <a class="button button--nav" routerLink="/samples/dashboard">
+      📊 Statistiques
+    </a>
     @if (canWrite) {
     <a class="button button--nav" routerLink="/samples/new">
       📄 Nouveau sample
@@ -17,11 +18,9 @@
     <button type="button" class="button" (click)="export.emit()">
       📤 Exporter
     </button>
-
     <button type="button" class="button" (click)="fileInput.click()">
       📥 Importer
     </button>
-
     <input
       #fileInput
       type="file"

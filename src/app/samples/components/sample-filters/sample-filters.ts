@@ -25,7 +25,7 @@ export class SampleFilters {
   @Output() activeChange = new EventEmitter<boolean | undefined>();
 
   @Output() apply = new EventEmitter<void>();
-  @Output() reset = new EventEmitter<void>();
+  @Output() filtersReset = new EventEmitter<void>();
   @Output() toggleFavorites = new EventEmitter<void>();
 
   readonly SampleStatus = SampleStatus;
