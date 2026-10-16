@@ -1,312 +1,329 @@
-# AngularStarter
+# Présentation de l'application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.12.
+Angular Starter est une application de gestion de catalogue de samples développée avec Angular 21.
 
-## Development server
+L'application permet aux utilisateurs authentifiés de consulter, rechercher, administrer et analyser un ensemble de samples tout en bénéficiant d'une expérience moderne basée sur les dernières fonctionnalités Angular.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+# Principales fonctionnalités
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Authentification et Sécurité
 
-## Code scaffolding
+L'application dispose d'un système complet d'authentification basé sur JWT.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Fonctionnalités :
 
-```bash
-ng generate component component-name
-```
+- Connexion utilisateur
+- Déconnexion sécurisée
+- Protection des pages via Guards
+- Gestion automatique des tokens via Interceptor HTTP
+- Gestion des droits d'accès
+- Restauration automatique de session
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## Gestion des Samples
 
-## Building
+Le cœur de l'application repose sur un catalogue de samples.
 
-To build the project run:
+Chaque sample peut être :
 
-```bash
-ng build
-```
+- Consulté
+- Créé
+- Modifié
+- Dupliqué
+- Archivé dans la corbeille
+- Supprimé définitivement
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## Recherche et Filtrage
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Le catalogue dispose de fonctionnalités avancées de recherche permettant aux utilisateurs de retrouver rapidement les données souhaitées.
 
-```bash
-ng test
-```
+Filtres disponibles :
 
-## Running end-to-end tests
+- Recherche par libellé
+- Filtrage par statut
+- Filtrage par catégorie
+- Filtrage Actif / Inactif
+- Filtrage Favoris uniquement
+- Consultation de la corbeille
 
-For end-to-end (e2e) testing, run:
+Les filtres sont combinables afin d'affiner précisément les résultats.
 
-```bash
-ng e2e
-```
+---
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Gestion des Favoris
 
-## Additional Resources
+Chaque utilisateur peut personnaliser son expérience en enregistrant des samples dans ses favoris.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Fonctionnalités :
 
-Démontré :
-Angular fundamentals
-├── ✅ Components
-├── ✅ Templates
-├── ✅ Property binding
-├── ✅ Event binding
-├── ✅ Routing
-├── ✅ RouterOutlet
-├── ✅ Route parameters
-└── ✅ Lazy loading
+- Ajout aux favoris
+- Retrait des favoris
+- Vue filtrée sur les favoris de l'utilisateur connecté
 
-Modern Angular
-├── ✅ Standalone
-├── ✅ Signals
-├── ✅ computed()
-├── ✅ @if
-├── ✅ @for
-├── ✅ track
-├── 🟡 OnPush
-└── ⬜ effect()
+Les favoris sont propres à chaque utilisateur.
 
-Architecture
-├── ✅ Feature-oriented
-├── ✅ Feature routing
-├── ✅ Models
-├── ⬜ Store
-├── ⬜ Data access layer
-└── ⬜ UI components
+---
 
-Rendering
-├── ✅ CSR
-├── ✅ Prerender / SSG
-└── 🟡 SSR
+## Corbeille et Archivage
 
-Forms
-├── ⬜ Reactive Forms
-├── ⬜ Typed Forms
-├── ⬜ Validation
-└── ⬜ FormArray
+L'application privilégie une stratégie d'archivage plutôt que de suppression immédiate.
 
-HTTP
-├── ⬜ HttpClient
-├── ⬜ RxJS
-├── ⬜ Interceptors
-├── ⬜ Error handling
-└── ⬜ API layer
+Fonctionnalités :
 
-Security
-├── ⬜ OIDC
-├── ⬜ Guards
-├── ⬜ JWT
-└── ⬜ Permissions
+- Mise en corbeille
+- Consultation de la corbeille
+- Archivage partagé entre les utilisateurs
+- Suppression définitive si nécessaire
 
-Advanced
-├── ⬜ inject()
-├── ⬜ @defer
-├── ⬜ input()
-├── ⬜ output()
-└── ⬜ Signals ↔ RxJS
+Cette approche permet une meilleure traçabilité et réduit les risques de suppression accidentelle.
 
-RoadMap :
+---
 
-ProjectList
-2
+## Import et Export
+
+Afin de faciliter les traitements en masse, l'application propose des mécanismes d'import et d'export.
+
+### Import
+
+- Import Excel en masse
+- Validation des données importées
+- Gestion des erreurs ligne par ligne
+
+### Export
+
+- Export CSV
+- Export Excel
+- Export des éléments sélectionnés uniquement
+
+---
+
+## Actions Groupées
+
+Les utilisateurs peuvent sélectionner plusieurs samples afin d'appliquer des actions en masse.
+
+Actions disponibles :
+
+- Export des éléments sélectionnés
+- Duplication de plusieurs samples
+- Archivage groupé
+- Activation groupée
+
+---
+
+## Dashboard et Statistiques
+
+L'application propose un tableau de bord permettant de suivre les principaux indicateurs métier.
+
+Indicateurs disponibles :
+
+- Nombre total de samples
+- Nombre de samples actifs
+- Nombre de samples inactifs
+- Nombre de favoris
+- Nombre de samples archivés
+
+Visualisations :
+
+- Répartition par statut
+- Répartition par catégorie
+- Évolution des créations dans le temps
+
+Le dashboard permet d'obtenir rapidement une vision globale du catalogue.
+
+---
+
+# Architecture Fonctionnelle
+
+```text
+Utilisateur
 │
-3
-▼
-4
-ProjectStore
-5
+├── Authentification
+│   ├── Login
+│   ├── Logout
+│   ├── Guard
+│   └── Interceptor JWT
 │
-6
-├── private _projects
-7
-│ ↓
-8
-│ signal()
-9
+├── Catalogue de Samples
+│   ├── Consultation
+│   ├── Recherche
+│   ├── Filtres
+│   ├── CRUD
+│   ├── Favoris
+│   └── Corbeille
 │
-10
-├── projects
-11
-│ ↓
-12
-│ asReadonly()
-13
+├── Traitements de Masse
+│   ├── Import Excel
+│   ├── Export CSV / Excel
+│   └── Actions Groupées
 │
-14
-└── computed(...)
+└── Dashboard
+    ├── KPI
+    ├── Statistiques
+    └── Graphiques
+```
 
-SCENARIOS A VALIDER :
-✅ Login
-accessToken → Signal
-refreshToken → HttpOnly
+# Cas d'usage couverts
 
-✅ Requête API
-Authorization: Bearer accessToken
+✅ Authentification sécurisée
 
-✅ F5
-accessToken perdu
-refresh automatique
-accessToken restauré
-refreshToken rotaté
+✅ Gestion complète du cycle de vie d'un sample
 
-✅ Access token expiré
-API → 401
-refresh → 200
-requête rejouée → 200
+✅ Recherche multicritère
 
-✅ Plusieurs 401
-un seul /refresh
+✅ Gestion des favoris par utilisateur
 
-✅ Logout
-accessToken supprimé
-refreshToken révoqué/supprimé
+✅ Archivage et corbeille
 
-✅ F5 après logout
-session non restaurée
+✅ Import massif de données
 
-PUIS CREER LES ECRANS
+✅ Export sélectif de données
 
-v1 : Terminée
+✅ Analyse statistique et reporting
 
-- Liste des samples
-- Recherche avec filtres
-- Consultation détail
-- Création, Modification, Duplication, Suppression d'un sample
-- Routing, Service, Authentification, Filter et Guard
+✅ Interface moderne Angular 21 basée sur Signals et Standalone Components
 
-V2 :
-export CSV/Excel (ok)
-import en masse (ok)
-sélection multiple et actions groupées - export, duplication, suppression et activation des samples sélectionnés uniquement (ok)
-archivage plutôt que suppression physique (ok)
-favoris (ok)
+# 🚧 Travaux en cours
 
-- historique / audit (créer une table SampleHistory de l'historique des modifications, )
-  @Entity
-  class SampleHistory {
-  Long id;
-  Long sampleId;
-  HistoryAction action;
-  String changedBy;
-  LocalDateTime changedAt;
-  @Lob
-  String details;
-  }
-  Sample > Détail > Historique > Commentaires
-- dashboard avec quelques statistiques (un joli dashboard avec nombre de samples, favoris, actifs, archivés, corbeille)
-  Service à créer côté backend
-  {
-  "overview": {
-  "totalSamples": 1250,
-  "activeSamples": 980,
-  "inactiveSamples": 270,
-  "favoriteSamples": 320
-  },
-  "statusDistribution": [
-  {
-  "status": "CREATED",
-  "count": 450
-  },
-  {
-  "status": "IN_PROGRESS",
-  "count": 320
-  },
-  {
-  "status": "COMPLETED",
-  "count": 420
-  },
-  {
-  "status": "REJECTED",
-  "count": 60
-  }
-  ],
-  "categoryDistribution": [
-  {
-  "category": "A",
-  "count": 500
-  },
-  {
-  "category": "B",
-  "count": 350
-  },
-  {
-  "category": "C",
-  "count": 250
-  },
-  {
-  "category": "D",
-  "count": 150
-  }
-  ],
-  "favoriteDistribution": {
-  "favorites": 320,
-  "nonFavorites": 930
-  },
-  "stockDistribution": {
-  "withStock": 1120,
-  "withoutStock": 130
-  },
-  "monthlyCreations": [
-  {
-  "month": "2026-01",
-  "count": 85
-  },
-  {
-  "month": "2026-02",
-  "count": 104
-  },
-  {
-  "month": "2026-03",
-  "count": 127
-  }
-  ],
-  "priceStatistics": {
-  "min": 9.99,
-  "max": 1499.99,
-  "average": 256.74
-  },
-  "quantityStatistics": {
-  "min": 1,
-  "max": 1000,
-  "average": 145.2
-  }
-  }
+Bien que l'application couvre déjà l'ensemble des fonctionnalités métier principales, plusieurs axes d'amélioration sont prévus afin de renforcer la qualité, la traçabilité et la maintenabilité de la solution.
 
-Puis Faire un README professionnel
+---
+
+## 🧪 Stratégie de Tests
+
+La couverture applicative sera complétée par la mise en place d'une stratégie de tests complète.
+
+### Tests Unitaires
 
 Objectif :
-ANGULAR STARTER (Créer le README adapté)
 
-Authentication Architecture
-├── JWT ├── Lazy loading
-├── HttpOnly refresh ├── Feature architecture
-├── Rotation ├── Signals
-├── Interceptor └── Typed models
-└── Guards
+- Validation de la logique métier
+- Tests des services Angular
+- Tests des Guards
+- Tests des Interceptors
+- Tests des Stores et Signals
 
-Data UX
-├── HttpClient ├── Loading
-├── CRUD ├── Empty state
-├── Filtering ├── Errors
-├── Pagination ├── Toasts
-└── Cache └── Responsive
+Prévu :
 
-Forms Quality
-├── Typed reactive forms ├── Unit tests
-├── Validation ├── Component tests
-├── Async validation ├── HTTP tests
-└── Unsaved changes ├── E2E
-└── lint / CI
+```text
+⬜ Tests unitaires des composants
+⬜ Tests unitaires des services
+⬜ Tests unitaires des Guards
+⬜ Tests unitaires des Interceptors
+⬜ Tests unitaires des Stores/Signals
+```
+
+### Tests d'Intégration
+
+Prévu :
+
+```text
+⬜ Tests HttpClient
+⬜ Tests d'intégration API
+⬜ Validation des scénarios d'authentification
+```
+
+### Tests End-to-End
+
+Les principaux parcours utilisateurs seront automatisés :
+
+```text
+⬜ Connexion / Déconnexion
+⬜ Consultation du catalogue
+⬜ Création d'un sample
+⬜ Modification d'un sample
+⬜ Gestion des favoris
+⬜ Gestion de la corbeille
+⬜ Import Excel
+⬜ Export CSV / Excel
+⬜ Consultation du Dashboard
+```
+
+---
+
+## 📝 Historisation des Actions
+
+Afin d'améliorer la traçabilité des opérations réalisées sur les samples, une fonctionnalité d'historisation sera ajoutée.
+
+### Objectifs
+
+- Suivre les modifications effectuées sur les samples
+- Conserver un journal des actions utilisateur
+- Faciliter les audits
+- Améliorer l'investigation des incidents
+
+### Entité cible
+
+```java
+@Entity
+class SampleHistory {
+
+    Long id;
+
+    Long sampleId;
+
+    HistoryAction action;
+
+    String changedBy;
+
+    LocalDateTime changedAt;
+
+    @Lob
+    String details;
+}
+```
+
+### Actions Historisées
+
+```text
+⬜ Création
+⬜ Modification
+⬜ Duplication
+⬜ Mise en favori
+⬜ Retrait des favoris
+⬜ Archivage
+⬜ Restauration
+⬜ Suppression définitive
+⬜ Import en masse
+```
+
+### Interface Utilisateur Prévue
+
+```text
+Sample
+└── Détail
+    └── Historique
+        ├── Timeline des événements
+        ├── Auteur de l'action
+        ├── Date de modification
+        ├── Détail des changements
+        └── Commentaires
+```
+
+---
+
+## 🎯 Objectif Final
+
+À terme, Angular Starter a vocation à proposer :
+
+✅ Authentification sécurisée JWT
+
+✅ Gestion complète d'un catalogue métier
+
+✅ Dashboard et reporting
+
+✅ Import / Export de données
+
+✅ Actions groupées
+
+✅ Architecture Angular moderne (Signals, Standalone, Lazy Loading)
+
+✅ Historisation des actions
+
+✅ Couverture de tests complète
+
+✅ Base réutilisable pour des projets Angular d'entreprise

@@ -1,64 +1,84 @@
 .dashboard {
-  padding: 1.5rem;
+  max-width: 1400px;
+  margin: auto;
+  padding: 2rem;
 }
 
-h1 {
-  margin-bottom: 1.5rem;
-}
+.dashboard-header {
+  margin-bottom: 2rem;
 
-.error {
-  color: #dc2626;
+  h1 {
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: #64748b;
+  }
 }
 
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.grid {
+.kpi-card {
+  padding: 1.5rem;
+  border-radius: 16px;
+  color: white;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+  span {
+    display: block;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+  }
+
+  strong {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+}
+
+.blue {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.green {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+.orange {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.purple {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.red {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.charts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow:
-    0 1px 3px rgb(0 0 0 / 10%),
-    0 1px 2px rgb(0 0 0 / 6%);
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+  h2 {
+    margin-bottom: 1rem;
+  }
 }
 
-.kpi {
-  display: flex;
-  flex-direction: column;
-}
-
-.label {
-  color: #6b7280;
-  font-size: 0.875rem;
-}
-
-.value {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-top: 0.5rem;
-}
-
-.row {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-}
-
-.row:not(:last-child) {
-  border-bottom: 1px solid #e5e7eb;
-}
-
-h2 {
-  margin-bottom: 1rem;
-  font-size: 1rem;
+.error-card {
+  color: #dc2626;
 }

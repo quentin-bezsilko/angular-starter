@@ -26,6 +26,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: "samples/dashboard",
+        loadComponent: () =>
+          import("./samples/pages/sample-dashboard/sample-dashboard").then(
+            (m) => m.SampleDashboard,
+          ),
+      },
+      {
         path: "samples/:id/edit",
         loadComponent: () =>
           import("./samples/components/sample-edit/sample-edit").then(
@@ -44,13 +51,6 @@ export const routes: Routes = [
         loadComponent: () =>
           import("./samples/pages/sample-trash/sample-trash").then(
             (m) => m.SampleTrash,
-          ),
-      },
-      {
-        path: "dashboard",
-        loadComponent: () =>
-          import("./samples/pages/sample-dashboard/sample-dashboard").then(
-            (m) => m.SampleDashboard,
           ),
       },
       {

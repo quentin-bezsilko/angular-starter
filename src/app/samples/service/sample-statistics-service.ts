@@ -10,7 +10,10 @@ import type { SampleStatistics } from "../model/sample-statistics";
 export class DashboardService {
   private readonly http = inject(HttpClient);
 
+  private readonly apiUrl =
+    "http://localhost:8080/springstarter/api/v1/samples";
+
   getStatistics(): Observable<SampleStatistics> {
-    return this.http.get<SampleStatistics>("/api/v1/samples/statistics");
+    return this.http.get<SampleStatistics>(`${this.apiUrl}/statistics`);
   }
 }

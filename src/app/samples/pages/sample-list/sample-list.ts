@@ -64,9 +64,7 @@ export class SampleList implements OnInit {
 
   readonly displayedSamples = computed(() => {
     if (this.favoritesOnly()) {
-      return this.samples().filter(
-        (sample) => sample.favorite,
-      );
+      return this.samples().filter((sample) => sample.favorite);
     }
 
     return this.samples();
